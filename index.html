@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rodrigo Soldatelli da Rosa — Infraestrutura & SRE</title>
+<meta name="description" content="Sócio e Head de Infraestrutura na Hapolo. 15 anos operando e automatizando infraestrutura Linux em produção. Estudos de caso, código aberto e ensino.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+<meta property="og:title" content="Rodrigo Soldatelli da Rosa — Infraestrutura & SRE">
+<meta property="og:description" content="15 anos operando e automatizando infraestrutura Linux em produção. Estudos de caso reais.">
+<meta property="og:type" content="website">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f5f0;
+    --bg-card: #ffffff;
+    --bg-subtle: #fafaf7;
+    --border: #e8e8e3;
+    --text: #1a1a1a;
+    --text-soft: #55534e;
+    --text-mute: #8a8880;
+    --accent: #e05a2b;
+    --blue: #2878c8;
+    --green: #1d9e75;
+    --radius: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14140f;
+      --bg-card: #1c1c18;
+      --bg-subtle: #232320;
+      --border: #32322c;
+      --text: #f0efe9;
+      --text-soft: #b8b5ac;
+      --text-mute: #86837a;
+      --accent: #ff7a4d;
+      --blue: #6aa9ec;
+      --green: #35c496;
+    }
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* ---------- topo ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar .wrap {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; padding-top: .7rem; padding-bottom: .7rem;
+  }
+  .topbar .who { font-size: 14px; font-weight: 600; letter-spacing: -.01em; }
+  .topbar nav { display: flex; gap: 1.1rem; align-items: center; }
+  .topbar nav a {
+    font-size: 13px; color: var(--text-soft); text-decoration: none;
+  }
+  .topbar nav a:hover { color: var(--accent); }
+  @media (max-width: 680px) { .topbar nav .hide-sm { display: none; } }
+
+  .langbtn {
+    border: 1px solid var(--border); background: var(--bg-card); color: var(--text-soft);
+    font: inherit; font-size: 12px; font-weight: 600; letter-spacing: .04em;
+    padding: 5px 11px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+  }
+  .langbtn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- hero ---------- */
+  header.hero { padding: 4.5rem 0 3rem; }
+  header.hero h1 {
+    font-size: clamp(30px, 6vw, 44px); font-weight: 700;
+    letter-spacing: -.025em; line-height: 1.12; margin-bottom: .7rem;
+  }
+  .role {
+    font-size: clamp(16px, 2.4vw, 19px); color: var(--accent);
+    font-weight: 600; margin-bottom: 1.4rem; line-height: 1.4;
+  }
+  .lede { font-size: 17px; color: var(--text-soft); max-width: 62ch; }
+  .lede + .lede { margin-top: .9rem; }
+  .lede strong { color: var(--text); font-weight: 600; }
+
+  .links { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.8rem; }
+  .links a {
+    display: inline-flex; align-items: center; gap: .4rem;
+    font-size: 14px; font-weight: 500; text-decoration: none;
+    color: var(--text); background: var(--bg-card);
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: .45rem 1rem; transition: border-color .15s, color .15s;
+  }
+  .links a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- stats ---------- */
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; margin: 3rem 0;
+  }
+  .stat { background: var(--bg-card); padding: 1.1rem 1.2rem; }
+  .stat b { display: block; font-size: 25px; font-weight: 700; letter-spacing: -.02em; }
+  .stat span { display: block; font-size: 12.5px; color: var(--text-mute); margin-top: .15rem; line-height: 1.35; }
+
+  /* ---------- seções ---------- */
+  section { padding: 2.6rem 0; }
+  .sec-head { margin-bottom: 1.8rem; }
+  h2 {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .11em; color: var(--text-mute);
+    padding-bottom: .55rem; border-bottom: 1px solid var(--border);
+  }
+  .sec-intro { font-size: 15px; color: var(--text-soft); margin-top: .9rem; max-width: 62ch; }
+
+  /* ---------- casos ---------- */
+  .case {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.6rem 1.5rem; margin-bottom: 1.1rem;
+  }
+  .case h3 {
+    font-size: 19px; font-weight: 650; letter-spacing: -.015em;
+    line-height: 1.3; margin-bottom: .2rem;
+  }
+  .case .ctx {
+    font-size: 12px; color: var(--text-mute); font-weight: 500;
+    text-transform: uppercase; letter-spacing: .06em; margin-bottom: .9rem;
+  }
+  .case p { font-size: 15px; color: var(--text-soft); margin-bottom: .8rem; }
+  .case p:last-of-type { margin-bottom: 0; }
+  .case strong { color: var(--text); font-weight: 600; }
+
+  .label {
+    font-size: 11.5px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .07em; color: var(--text-mute);
+    display: block; margin: 1.1rem 0 .3rem;
+  }
+
+  .outcome {
+    border-left: 3px solid var(--green); background: var(--bg-subtle);
+    padding: .75rem 1rem; border-radius: 0 8px 8px 0; margin-top: 1.1rem;
+  }
+  .outcome p { font-size: 14.5px; color: var(--text); margin: 0; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: 1.1rem; }
+  .tag {
+    font-size: 11.5px; font-weight: 500; color: var(--text-mute);
+    background: var(--bg-subtle); border: 1px solid var(--border);
+    border-radius: 5px; padding: .2rem .55rem;
+  }
+  .case > a.repo {
+    display: inline-block; margin-top: 1rem; font-size: 13.5px;
+    color: var(--blue); text-decoration: none; font-weight: 500;
+  }
+  .case > a.repo:hover { text-decoration: underline; }
+
+  /* ---------- repos ---------- */
+  .repos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .8rem; }
+  .repo-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.1rem;
+    text-decoration: none; color: inherit; display: block;
+    transition: border-color .15s, transform .15s;
+  }
+  .repo-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .repo-card b { display: block; font-size: 14.5px; font-weight: 650; margin-bottom: .25rem; }
+  .repo-card span { display: block; font-size: 13px; color: var(--text-soft); line-height: 1.5; }
+  .repo-card em { display: block; font-style: normal; font-size: 11.5px; color: var(--text-mute); margin-top: .5rem; }
+
+  /* ---------- método ---------- */
+  .method { display: grid; gap: .8rem; }
+  .m-item {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.1rem 1.2rem;
+  }
+  .m-item b { display: block; font-size: 15px; font-weight: 650; margin-bottom: .3rem; }
+  .m-item span { font-size: 14.5px; color: var(--text-soft); }
+
+  /* ---------- timeline ---------- */
+  .tl { border-left: 2px solid var(--border); margin-left: .4rem; padding-left: 1.4rem; }
+  .tl-item { position: relative; padding-bottom: 1.5rem; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item::before {
+    content: ''; position: absolute; left: calc(-1.4rem - 6px); top: 7px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--text-mute);
+  }
+  .tl-item.now::before { border-color: var(--accent); background: var(--accent); }
+  .tl-when { font-size: 12px; color: var(--text-mute); font-weight: 600; letter-spacing: .03em; }
+  .tl-what { font-size: 15.5px; font-weight: 600; margin-top: .1rem; }
+  .tl-where { font-size: 14px; color: var(--text-soft); }
+
+  /* ---------- contato ---------- */
+  .cta {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.8rem 1.6rem; text-align: center;
+  }
+  .cta p { font-size: 16px; color: var(--text-soft); margin-bottom: 1.2rem; max-width: 48ch; margin-inline: auto; }
+
+  footer {
+    border-top: 1px solid var(--border); margin-top: 3rem;
+    padding: 1.6rem 0 2.5rem; font-size: 13px; color: var(--text-mute);
+    display: flex; flex-wrap: wrap; gap: .6rem; justify-content: space-between;
+  }
+  footer a { color: var(--text-mute); }
+
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="who">Rodrigo Soldatelli da Rosa</span>
+    <nav>
+      <a href="#casos" class="hide-sm"><span class="lang-pt">Casos</span><span class="lang-en" hidden>Case studies</span></a>
+      <a href="#codigo" class="hide-sm"><span class="lang-pt">Código</span><span class="lang-en" hidden>Code</span></a>
+      <a href="#contato" class="hide-sm"><span class="lang-pt">Contato</span><span class="lang-en" hidden>Contact</span></a>
+      <button class="langbtn" id="langbtn" type="button">EN</button>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <h1>Rodrigo Soldatelli da Rosa</h1>
+
+    <div class="role">
+      <span class="lang-pt">Sócio &amp; Head de Infraestrutura na Hapolo · Professor de Tecnologia</span>
+      <span class="lang-en" hidden>Partner &amp; Head of Infrastructure at Hapolo · Technology Teacher</span>
+    </div>
+
+    <p class="lede">
+      <span class="lang-pt">Ajudei a construir uma empresa de tecnologia do zero — e a infraestrutura que a mantém no ar é minha responsabilidade. Quando entrei, éramos <strong>duas pessoas</strong>. Hoje administro <strong>centenas de servidores Linux</strong> em nuvem, entre a operação da empresa e as infraestruturas dedicadas de clientes pelo país.</span>
+      <span class="lang-en" hidden>I helped build a technology company from scratch — and the infrastructure that keeps it running is my responsibility. When I joined, we were <strong>two people</strong>. Today I run <strong>hundreds of Linux servers</strong> in the cloud, across the company's own operation and the dedicated infrastructure of clients around the country.</span>
+    </p>
+
+    <p class="lede">
+      <span class="lang-pt">Esta página existe porque a parte mais difícil do meu trabalho não cabe num repositório. Abaixo estão os casos reais — o que quebrou, o que eu investiguei e o que mudou depois.</span>
+      <span class="lang-en" hidden>This page exists because the hardest part of my work doesn't fit in a repository. Below are the real cases — what broke, what I investigated, and what changed afterwards.</span>
+    </p>
+
+    <div class="links">
+      <a href="https://www.linkedin.com/in/rodrigo-soldatelli-da-rosa/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/rsoldatellirosa" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:rsoldatellirosa@gmail.com">rsoldatellirosa@gmail.com</a>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat">
+      <b>15</b>
+      <span class="lang-pt">anos em tecnologia</span>
+      <span class="lang-en" hidden>years in tech</span>
+    </div>
+    <div class="stat">
+      <b>10</b>
+      <span class="lang-pt">anos construindo a mesma empresa, como sócio</span>
+      <span class="lang-en" hidden>years building the same company, as a partner</span>
+    </div>
+    <div class="stat">
+      <b>100s</b>
+      <span class="lang-pt">de servidores Linux sob minha responsabilidade</span>
+      <span class="lang-en" hidden>of Linux servers under my responsibility</span>
+    </div>
+    <div class="stat">
+      <b>5</b>
+      <span class="lang-pt">pessoas na equipe que eu lidero</span>
+      <span class="lang-en" hidden>people on the team I lead</span>
+    </div>
+  </div>
+
+  <!-- ============ CASOS ============ -->
+  <section id="casos">
+    <div class="sec-head">
+      <h2><span class="lang-pt">Estudos de caso</span><span class="lang-en" hidden>Case studies</span></h2>
+      <p class="sec-intro">
+        <span class="lang-pt">Trabalho de produção, descrito sem código, sem nome de cliente e sem endereço de servidor. O que interessa aqui é a decisão, não o script.</span>
+        <span class="lang-en" hidden>Production work, described without code, client names or server addresses. What matters here is the decision, not the script.</span>
+      </p>
+    </div>
+
+    <!-- caso 1 -->
+    <article class="case">
+      <h3>
+        <span class="lang-pt">O diagnóstico que inocentou a plataforma</span>
+        <span class="lang-en" hidden>The investigation that cleared the platform</span>
+      </h3>
+      <div class="ctx">
+        <span class="lang-pt">Rastreamento veicular · protocolo binário · análise de causa-raiz</span>
+        <span class="lang-en" hidden>Vehicle tracking · binary protocol · root cause analysis</span>
+      </div>
+
+      <p>
+        <span class="lang-pt">Um cliente reportou que os rastreadores "não atualizavam a posição": a comunicação GSM dava sinal de vida, mas o GPS ficava parado. A suspeita natural caiu sobre a plataforma, logo depois de uma migração de stack.</span>
+        <span class="lang-en" hidden>A client reported that trackers "were not updating position": the GSM side showed signs of life, but the GPS stayed frozen. Suspicion naturally fell on the platform, right after a stack migration.</span>
+      </p>
+
+      <span class="label"><span class="lang-pt">O que eu encontrei</span><span class="lang-en" hidden>What I found</span></span>
+      <p>
+        <span class="lang-pt">Descendo até o protocolo binário dos equipamentos, achei <strong>dois bugs reais</strong> — e nenhum dos dois era a causa da reclamação.</span>
+        <span class="lang-en" hidden>Going down to the devices' binary protocol, I found <strong>two real bugs</strong> — and neither was the cause of the complaint.</span>
+      </p>
+      <p>
+        <span class="lang-pt"><strong>Um bug de fuso horário com 20 anos de idade.</strong> Equipamentos sem fix de GPS enviam pacotes com o ano zerado, que decodifica como 2006. O worker aplicava a conversão de fuso usando a data do próprio pacote — e dezembro de 2006 tinha horário de verão no Brasil. Resultado: a data gravada ficava exatamente 1 hora no passado, em quase 60% dos equipamentos daquele cliente. O worker antigo descartava esses pacotes, então o problema só apareceu depois da migração.</span>
+        <span class="lang-en" hidden><strong>A 20-year-old timezone bug.</strong> Devices without a GPS fix send packets with a zeroed year, which decodes as 2006. The worker applied timezone conversion using the packet's own date — and December 2006 was under daylight saving time in Brazil. The result: the stored timestamp landed exactly one hour in the past, on nearly 60% of that client's devices. The previous worker discarded those packets, so the problem only surfaced after the migration.</span>
+      </p>
+      <p>
+        <span class="lang-pt"><strong>Um nibble lido errado.</strong> O parser lia o nibble alto do byte de informação de GPS — que é o comprimento do bloco — como se fosse a contagem de satélites. A contagem real está no nibble baixo. Efeito: 100% dos pacotes de duas portas marcados com qualidade de sinal inválida.</span>
+        <span class="lang-en" hidden><strong>A misread nibble.</strong> The parser read the high nibble of the GPS info byte — which is the block length — as the satellite count. The real count is in the low nibble. Effect: 100% of packets on two ports flagged with invalid signal quality.</span>
+      </p>
+
+      <span class="label"><span class="lang-pt">A parte que importa</span><span class="lang-en" hidden>The part that matters</span></span>
+      <p>
+        <span class="lang-pt">Eu tinha uma hipótese boa — o segundo bug explicaria a queixa. <strong>Fui verificar no banco e derrubei minha própria hipótese:</strong> os equipamentos afetados tinham posição avançando normalmente. O bug era cosmético, só rotulava errado a qualidade do fix. A causa real do congelamento era do lado do equipamento: aparelhos enviando apenas heartbeat, zero pacote de localização por mais de 40 horas seguidas. Não era bug de plataforma nenhum.</span>
+        <span class="lang-en" hidden>I had a good hypothesis — the second bug would explain the complaint. <strong>I went to check the database and disproved my own hypothesis:</strong> the affected devices had positions advancing normally. The bug was cosmetic; it only mislabelled fix quality. The real cause of the freeze was device-side: units sending only heartbeats, zero location packets for more than 40 hours straight. It was not a platform bug at all.</span>
+      </p>
+
+      <div class="outcome">
+        <p>
+          <span class="lang-pt"><strong>Resultado:</strong> dois relatórios técnicos para o time que mantém o worker, com causa-raiz e correção proposta, mais um anexo de 376 equipamentos. E um laudo para o cliente explicando, sem jargão, a diferença entre "o aparelho não fala" e "a plataforma não grava" — incluindo uma nota de transparência sobre o bug cosmético que encontramos no caminho.</span>
+          <span class="lang-en" hidden><strong>Outcome:</strong> two technical reports for the team that maintains the worker, with root cause and proposed fix, plus an annex listing 376 devices. And a written report for the client explaining, without jargon, the difference between "the device isn't talking" and "the platform isn't recording" — including a transparency note about the cosmetic bug found along the way.</span>
+        </p>
+      </div>
+
+      <div class="tags">
+        <span class="tag">GT06 / Concox</span><span class="tag">MySQL</span><span class="tag">Go</span>
+        <span class="tag"><span class="lang-pt">Análise de causa-raiz</span><span class="lang-en" hidden>Root cause analysis</span></span>
+        <span class="tag"><span class="lang-pt">Comunicação técnica</span><span class="lang-en" hidden>Technical writing</span></span>
+      </div>
+    </article>
+
+    <!-- caso 2 -->
+    <article class="case">
+      <h3>
+        <span class="lang-pt">Restauração de dados históricos sob demanda</span>
+        <span class="lang-en" hidden>On-demand historical data restore</span>
+      </h3>
+      <div class="ctx">
+        <span class="lang-pt">Automação de processo manual · infraestrutura efêmera</span>
+        <span class="lang-en" hidden>Manual process automation · ephemeral infrastructure</span>
+      </div>
+
+      <p>
+        <span class="lang-pt">Quando um cliente pedia um relatório de meses atrás, o processo era inteiramente manual: subir um servidor a partir do snapshot de backup, esperar o banco levantar, copiar as tabelas certas para produção e destruir o servidor no fim. Levava horas de atenção humana e ninguém queria fazer.</span>
+        <span class="lang-en" hidden>When a client asked for a report from months back, the process was entirely manual: spin up a server from the backup snapshot, wait for the database to come up, copy the right tables into production and destroy the server afterwards. It took hours of human attention and nobody wanted to do it.</span>
+      </p>
+
+      <span class="label"><span class="lang-pt">O que eu construí</span><span class="lang-en" hidden>What I built</span></span>
+      <p>
+        <span class="lang-pt">Um orquestrador que cuida do ciclo de vida inteiro: localiza o snapshot pelo nome, cria o menor servidor cujo disco comporta o volume, anexa o storage, <strong>espera de verdade</strong> o serviço e o banco responderem, dispara a cópia das tabelas e destrói tudo no fim — servidor e volume, com retry para o desanexo automático. Tem modo interativo, modo linha de comando, <code>--dry-run</code> e <code>--keep</code> para depurar sem destruir.</span>
+        <span class="lang-en" hidden>An orchestrator that handles the whole lifecycle: finds the snapshot by name, creates the smallest server whose disk fits the volume, attaches storage, <strong>actually waits</strong> for the service and database to answer, triggers the table copy and destroys everything at the end — server and volume, with retry for the auto-detach. It has an interactive mode, a CLI mode, <code>--dry-run</code> and <code>--keep</code> for debugging without destroying.</span>
+      </p>
+
+      <span class="label"><span class="lang-pt">O detalhe que só aparece testando</span><span class="lang-en" hidden>The detail you only find by testing</span></span>
+      <p>
+        <span class="lang-pt">A API de cópia retornava <strong><code>finalizado: OK</code> mesmo quando não copiava nada</strong> — tabela ausente ou vazia na origem também termina "com sucesso". Um falso positivo silencioso, do tipo que só aparece quando o cliente reclama semanas depois que o relatório veio vazio. Passei a validar toda execução com uma contagem de linhas no destino. <em>"Terminou" não é o mesmo que "funcionou".</em></span>
+        <span class="lang-en" hidden>The copy API returned <strong><code>finished: OK</code> even when it copied nothing</strong> — a missing or empty source table also finishes "successfully". A silent false positive, the kind you only discover when the client complains weeks later that the report came back empty. I started validating every run with a row count on the destination. <em>"Finished" is not the same as "worked".</em></span>
+      </p>
+
+      <div class="outcome">
+        <p>
+          <span class="lang-pt"><strong>Resultado:</strong> processo de horas virou um comando. Validado ponta a ponta com snapshot de 320&nbsp;GB e volume de 900&nbsp;GB. Custo de cerca de <strong>US$&nbsp;0,60 por execução</strong>, porque o servidor vive só os minutos da cópia. Empacotado em Docker para rodar igual em qualquer máquina.</span>
+          <span class="lang-en" hidden><strong>Outcome:</strong> an hours-long process became a single command. Validated end to end with a 320&nbsp;GB snapshot and a 900&nbsp;GB volume. Cost of roughly <strong>US$&nbsp;0.60 per run</strong>, because the server only lives for the minutes of the copy. Packaged in Docker so it runs the same anywhere.</span>
+        </p>
+      </div>
+
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">DigitalOcean API</span><span class="tag">MySQL</span><span class="tag">Docker</span>
+        <span class="tag"><span class="lang-pt">Infraestrutura efêmera</span><span class="lang-en" hidden>Ephemeral infrastructure</span></span>
+      </div>
+    </article>
+
+    <!-- caso 3 -->
+    <article class="case">
+      <h3>
+        <span class="lang-pt">Migração de stack em produção, sem janela de manutenção</span>
+        <span class="lang-en" hidden>Production stack migration, with no maintenance window</span>
+      </h3>
+      <div class="ctx">
+        <span class="lang-pt">Python → Go · deploy em lote · rollback</span>
+        <span class="lang-en" hidden>Python → Go · batch deploy · rollback</span>
+      </div>
+
+      <p>
+        <span class="lang-pt">Os serviços que recebem a comunicação dos rastreadores rodavam em Python e batiam num teto de conexões simultâneas por servidor. A substituição por uma versão em Go precisava acontecer em dezenas de servidores de produção, que não podem parar — são eles que recebem os dados dos equipamentos em tempo real.</span>
+        <span class="lang-en" hidden>The services receiving tracker communication ran on Python and were hitting a ceiling of concurrent connections per server. Replacing them with a Go version had to happen across dozens of production servers that cannot stop — they are the ones receiving device data in real time.</span>
+      </p>
+
+      <span class="label"><span class="lang-pt">Como o deploy funciona</span><span class="lang-en" hidden>How the deploy works</span></span>
+      <p>
+        <span class="lang-pt">Ferramenta própria de deploy em lote. Para cada servidor: envia o binário para um nome temporário, <strong>confere o md5 do que chegou contra o local e aborta aquele servidor se divergir</strong>, guarda o binário anterior como <code>.prev</code>, move por cima, reinicia o serviço e verifica saúde — sem panic no log e com o contador de gravações voltando a subir. Rollback é um comando que restaura o <code>.prev</code>.</span>
+        <span class="lang-en" hidden>A purpose-built batch deploy tool. For each server: upload the binary to a temporary name, <strong>check the md5 of what arrived against the local one and abort that server if they differ</strong>, keep the previous binary as <code>.prev</code>, move over it, restart the service and verify health — no panic in the log and the write counter climbing again. Rollback is one command restoring <code>.prev</code>.</span>
+      </p>
+      <p>
+        <span class="lang-pt">Três decisões que vieram de errar antes: enviar direto por cima do binário falha com <em>"text file busy"</em> enquanto o serviço roda, daí o temporário e o move. A falha de um servidor não interrompe a fila dos outros. E a senha entra só por variável de ambiente, nunca em arquivo.</span>
+        <span class="lang-en" hidden>Three decisions that came from getting it wrong first: writing straight over the binary fails with <em>"text file busy"</em> while the service runs, hence the temp file and the move. One server failing does not stop the queue for the others. And the password comes only from an environment variable, never from a file.</span>
+      </p>
+
+      <div class="outcome">
+        <p>
+          <span class="lang-pt"><strong>Resultado:</strong> capacidade por servidor saiu de cerca de <strong>800 para cerca de 10.000 conexões simultâneas</strong>. Migração conduzida em dezenas de servidores de produção, um por vez quando o binário era novo, com rollback disponível a qualquer momento.</span>
+          <span class="lang-en" hidden><strong>Outcome:</strong> capacity per server went from roughly <strong>800 to roughly 10,000 concurrent connections</strong>. Migration carried out across dozens of production servers, one at a time whenever the binary was new, with rollback available at any point.</span>
+        </p>
+      </div>
+
+      <div class="tags">
+        <span class="tag">Go</span><span class="tag">Bash</span><span class="tag">SSH / SFTP</span><span class="tag">Docker</span><span class="tag">Supervisor</span>
+      </div>
+    </article>
+
+    <!-- caso 4 -->
+    <article class="case">
+      <h3>
+        <span class="lang-pt">Monitoramento que não vira ruído</span>
+        <span class="lang-en" hidden>Monitoring that doesn't become noise</span>
+      </h3>
+      <div class="ctx">
+        <span class="lang-pt">Observabilidade construída à mão · código aberto</span>
+        <span class="lang-en" hidden>Hand-built observability · open source</span>
+      </div>
+
+      <p>
+        <span class="lang-pt">Implantei do zero a observabilidade da empresa — Zabbix, Grafana e RabbitMQ — e, em volta dela, monitores próprios para o que as ferramentas de prateleira não cobriam do jeito que a operação precisava.</span>
+        <span class="lang-en" hidden>I built the company's observability from scratch — Zabbix, Grafana and RabbitMQ — and around it, custom monitors for what off-the-shelf tooling didn't cover the way the operation needed.</span>
+      </p>
+
+      <p>
+        <span class="lang-pt">O problema real de monitoramento não é detectar: é <strong>não avisar à toa</strong>. Alerta que dispara demais deixa de ser lido, e aí o alerta que importa passa junto. Os três monitores compartilham a mesma máquina de estado: limite, espera de confirmação antes de alertar, cooldown entre repetições, aviso quando normaliza, e estado gravado em disco — para que reiniciar o processo não duplique alerta nem perca desde quando o problema começou.</span>
+        <span class="lang-en" hidden>The real monitoring problem isn't detection: it's <strong>not crying wolf</strong>. An alert that fires too often stops being read, and then the one that matters slips by with it. All three monitors share the same state machine: threshold, a confirmation delay before alerting, cooldown between repeats, a recovery message, and state persisted to disk — so restarting the process neither duplicates an alert nor loses when the problem started.</span>
+      </p>
+
+      <div class="outcome">
+        <p>
+          <span class="lang-pt"><strong>Resultado:</strong> disco (por agente e por SSH, cobrindo a frota inteira) e profundidade de filas monitorados de forma contínua, com alertas em canais separados por tipo de problema. Publicado em versão sanitizada, com toda a configuração externalizada.</span>
+          <span class="lang-en" hidden><strong>Outcome:</strong> disk usage (both via agent and over SSH, covering the whole fleet) and queue depth continuously monitored, with alerts split into dedicated channels per problem type. Published in a sanitized version, with all configuration externalized.</span>
+        </p>
+      </div>
+
+      <a class="repo" href="https://github.com/rsoldatellirosa/infra-monitors" target="_blank" rel="noopener">
+        <span class="lang-pt">Ver o código →</span><span class="lang-en" hidden>See the code →</span>
+      </a>
+
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">Zabbix API</span><span class="tag">RabbitMQ</span><span class="tag">paramiko</span><span class="tag">Slack</span>
+      </div>
+    </article>
+
+    <!-- caso 5 -->
+    <article class="case">
+      <h3>
+        <span class="lang-pt">De 12 minutos para 45 segundos</span>
+        <span class="lang-en" hidden>From 12 minutes to 45 seconds</span>
+      </h3>
+      <div class="ctx">
+        <span class="lang-pt">Auditoria diária de contas cloud · asyncio</span>
+        <span class="lang-en" hidden>Daily cloud account audit · asyncio</span>
+      </div>
+
+      <p>
+        <span class="lang-pt">Quatro contas de nuvem, com a maior passando de cem servidores. Todo dia alguém precisava olhar o que tinha sido criado, destruído ou desligado, e se os backups rodaram. Ninguém olhava todo dia.</span>
+        <span class="lang-en" hidden>Four cloud accounts, the largest one past a hundred servers. Every day someone had to look at what had been created, destroyed or powered off, and whether backups ran. Nobody looked every day.</span>
+      </p>
+
+      <p>
+        <span class="lang-pt">Automatizei a conferência: as quatro contas em paralelo, com um relatório por email e um resumo no chat da equipe destacando as ações críticas — destruir, desligar, apagar, reconstruir. A primeira versão levava <strong>cerca de 12 minutos</strong>, quase tudo gasto paginando o histórico inteiro da conta maior. A correção foi parar a paginação assim que os eventos saem da janela de 24 horas: <strong>caiu para cerca de 45 segundos</strong>.</span>
+        <span class="lang-en" hidden>I automated the check: all four accounts in parallel, with an email report and a summary in the team chat highlighting critical actions — destroy, power off, delete, rebuild. The first version took <strong>about 12 minutes</strong>, almost all of it spent paginating the entire history of the largest account. The fix was to stop paginating as soon as events fall outside the 24-hour window: <strong>it dropped to about 45 seconds</strong>.</span>
+      </p>
+
+      <div class="outcome">
+        <p>
+          <span class="lang-pt"><strong>Resultado:</strong> conferência que ninguém fazia virou rotina automática diária, com os tokens em cofre do sistema operacional e escopo somente leitura. O relatório se arquiva sozinho numa etiqueta do email depois de enviado.</span>
+          <span class="lang-en" hidden><strong>Outcome:</strong> a check nobody performed became an automatic daily routine, with tokens stored in the OS credential vault and read-only scope. The report archives itself into an email label after being sent.</span>
+        </p>
+      </div>
+
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">asyncio</span><span class="tag">REST API</span><span class="tag">SMTP / IMAP</span>
+      </div>
+    </article>
+
+    <!-- caso 6 -->
+    <article class="case">
+      <h3>
+        <span class="lang-pt">A operação inteira num board</span>
+        <span class="lang-en" hidden>The whole operation on one board</span>
+      </h3>
+      <div class="ctx">
+        <span class="lang-pt">Processo interno · integração · liderança</span>
+        <span class="lang-en" hidden>Internal process · integration · leadership</span>
+      </div>
+
+      <p>
+        <span class="lang-pt">Implantei do zero o sistema que hoje conduz a operação interna da empresa. Um board único como fonte da verdade para suporte, infraestrutura e deploys — e, mais importante, integrado ao que já acontecia: mover um card notifica e marca o responsável, e o solicitante é avisado quando a tarefa volta.</span>
+        <span class="lang-en" hidden>I built from scratch the system that runs the company's internal operation today. A single board as the source of truth for support, infrastructure and deploys — and, more importantly, wired into what was already happening: moving a card notifies and tags the owner, and the requester is pinged when the task comes back.</span>
+      </p>
+
+      <p>
+        <span class="lang-pt">O detalhe que faz diferença: <strong>o monitoramento alimenta o board sozinho</strong>. O script que confere disco na frota atualiza o checklist via API — a infraestrutura reporta o próprio estado, sem humano no meio.</span>
+        <span class="lang-en" hidden>The detail that makes the difference: <strong>monitoring feeds the board on its own</strong>. The script that checks disk usage across the fleet updates the checklist through the API — the infrastructure reports its own state, with no human in the middle.</span>
+      </p>
+
+      <div class="outcome">
+        <p>
+          <span class="lang-pt"><strong>Resultado:</strong> todos os processos internos passam por lá hoje. Também respondo por toda a operação de suporte e atendimento da empresa, com equipe de 5 pessoas sob liderança direta, e faço a ponte entre suporte e desenvolvimento — decidindo o que vira correção, o que vira melhoria e o que se resolve na operação.</span>
+          <span class="lang-en" hidden><strong>Outcome:</strong> every internal process goes through it today. I also own the entire support and customer service operation, with a team of 5 reporting directly to me, and I bridge support and engineering — deciding what becomes a bug fix, what becomes a feature and what is solved in operations.</span>
+        </p>
+      </div>
+
+      <a class="repo" href="https://github.com/rsoldatellirosa/script-confere-hd-trello" target="_blank" rel="noopener">
+        <span class="lang-pt">Ver o script que alimenta o board →</span><span class="lang-en" hidden>See the script that feeds the board →</span>
+      </a>
+
+      <div class="tags">
+        <span class="tag">Trello API</span><span class="tag">Slack</span><span class="tag">Python</span>
+        <span class="tag"><span class="lang-pt">Desenho de processo</span><span class="lang-en" hidden>Process design</span></span>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============ MÉTODO ============ -->
+  <section id="metodo">
+    <div class="sec-head">
+      <h2><span class="lang-pt">Como eu trabalho</span><span class="lang-en" hidden>How I work</span></h2>
+      <p class="sec-intro">
+        <span class="lang-pt">Quatro regras que não são teoria — saíram de operar sistema que, quando cai, o cliente sente na mesma hora.</span>
+        <span class="lang-en" hidden>Four rules that aren't theory — they came from operating systems where, when things break, the client feels it immediately.</span>
+      </p>
+    </div>
+
+    <div class="method">
+      <div class="m-item">
+        <b><span class="lang-pt">Produção não é lugar de tentativa</span><span class="lang-en" hidden>Production is not a place to experiment</span></b>
+        <span class="lang-pt">Qualquer alteração em servidor de produção passa por autorização explícita. Isso não me deixa mais lento — me deixa reversível.</span>
+        <span class="lang-en" hidden>Any change to a production server goes through explicit authorization. That doesn't make me slower — it makes me reversible.</span>
+      </div>
+      <div class="m-item">
+        <b><span class="lang-pt">"Terminou" não é "funcionou"</span><span class="lang-en" hidden>"Finished" is not "worked"</span></b>
+        <span class="lang-pt">Retorno de sucesso é uma afirmação, não uma prova. Se dá para conferir o efeito — contar linhas, comparar md5, ler o log — eu confiro.</span>
+        <span class="lang-en" hidden>A success return is a claim, not evidence. If the effect can be checked — count rows, compare md5, read the log — I check it.</span>
+      </div>
+      <div class="m-item">
+        <b><span class="lang-pt">A hipótese boa também precisa passar no teste</span><span class="lang-en" hidden>A good hypothesis still has to pass the test</span></b>
+        <span class="lang-pt">Já derrubei diagnóstico meu que fechava bonito, porque o dado dizia outra coisa. Entregar a causa errada com confiança é pior do que dizer "ainda não sei".</span>
+        <span class="lang-en" hidden>I've discarded my own diagnosis that fit beautifully, because the data said otherwise. Delivering the wrong cause with confidence is worse than saying "I don't know yet".</span>
+      </div>
+      <div class="m-item">
+        <b><span class="lang-pt">Se o cliente não entendeu, não está resolvido</span><span class="lang-en" hidden>If the client didn't understand it, it isn't solved</span></b>
+        <span class="lang-pt">Dar aula me obrigou a explicar tecnologia sem jargão — e isso mudou como escrevo laudo técnico e como converso com cliente.</span>
+        <span class="lang-en" hidden>Teaching forced me to explain technology without jargon — and that changed how I write technical reports and how I talk to clients.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CÓDIGO ============ -->
+  <section id="codigo">
+    <div class="sec-head">
+      <h2><span class="lang-pt">Código aberto</span><span class="lang-en" hidden>Open source</span></h2>
+      <p class="sec-intro">
+        <span class="lang-pt">Ferramentas de infraestrutura publicadas em versão sanitizada, com configuração externa — e aplicações próprias que eu uso de verdade. Tudo sob licença MIT.</span>
+        <span class="lang-en" hidden>Infrastructure tooling published in sanitized form, with external configuration — and personal applications I actually use. All MIT licensed.</span>
+      </p>
+    </div>
+
+    <div class="repos">
+      <a class="repo-card" href="https://github.com/rsoldatellirosa/infra-monitors" target="_blank" rel="noopener">
+        <b>infra-monitors</b>
+        <span class="lang-pt">Três monitores de infraestrutura com alerta no Slack: disco via Zabbix, disco via SSH e profundidade de filas do RabbitMQ.</span>
+        <span class="lang-en" hidden>Three infrastructure monitors alerting to Slack: disk via Zabbix, disk over SSH and RabbitMQ queue depth.</span>
+        <em>Python · Zabbix · RabbitMQ</em>
+      </a>
+      <a class="repo-card" href="https://github.com/rsoldatellirosa/script-limpa-logs" target="_blank" rel="noopener">
+        <b>script-limpa-logs</b>
+        <span class="lang-pt">Limpeza de logs em múltiplos servidores Linux via SFTP, substituindo o acesso manual um a um.</span>
+        <span class="lang-en" hidden>Log cleanup across multiple Linux servers over SFTP, replacing one-by-one manual access.</span>
+        <em>Python · paramiko</em>
+      </a>
+      <a class="repo-card" href="https://github.com/rsoldatellirosa/script-confere-hd-trello" target="_blank" rel="noopener">
+        <b>script-confere-hd-trello</b>
+        <span class="lang-pt">Monitora uso de disco via SSH e atualiza sozinho um checklist no Trello.</span>
+        <span class="lang-en" hidden>Monitors disk usage over SSH and updates a Trello checklist on its own.</span>
+        <em>Python · Trello API</em>
+      </a>
+      <a class="repo-card" href="https://github.com/rsoldatellirosa/daily-briefing" target="_blank" rel="noopener">
+        <b>daily-briefing</b>
+        <span class="lang-pt">Agenda do dia e emails não lidos, resumidos por IA e entregues por email às 06h. Sem servidor próprio.</span>
+        <span class="lang-en" hidden>The day's agenda and unread email, summarized by AI and delivered at 6 a.m. No server of my own.</span>
+        <em>Python · GitHub Actions · Claude API</em>
+      </a>
+      <a class="repo-card" href="https://github.com/rsoldatellirosa/controle-financeiro" target="_blank" rel="noopener">
+        <b>controle-financeiro</b>
+        <span class="lang-pt">Dashboard de gastos em Apps Script — sem chave de API no cliente e sem precisar deixar a planilha pública.</span>
+        <span class="lang-en" hidden>Spending dashboard in Apps Script — no API key in the client and no need to make the spreadsheet public.</span>
+        <em>Apps Script · Chart.js</em>
+      </a>
+      <a class="repo-card" href="https://github.com/rsoldatellirosa/tv-tracker" target="_blank" rel="noopener">
+        <b>tv-tracker</b>
+        <span class="lang-pt">Tracker próprio de séries, criado quando o TV Time encerrou. Migrei 65 séries e 4.321 episódios antes do apagão.</span>
+        <span class="lang-en" hidden>My own show tracker, built when TV Time shut down. I migrated 65 shows and 4,321 episodes before the lights went out.</span>
+        <em>Next.js · Supabase · TMDB</em>
+      </a>
+      <a class="repo-card" href="https://github.com/rsoldatellirosa/album-copa-2026" target="_blank" rel="noopener">
+        <b>album-copa-2026</b>
+        <span class="lang-pt">App de figurinhas da Copa: 980 cromos, escrita só via rota autenticada, PWA instalável. No ar.</span>
+        <span class="lang-en" hidden>World Cup sticker app: 980 stickers, writes only through an authenticated route, installable PWA. Live.</span>
+        <em>Next.js · Supabase · PWA</em>
+      </a>
+      <a class="repo-card" href="https://github.com/rsoldatellirosa/script-manutencao-semanal-pc" target="_blank" rel="noopener">
+        <b>script-manutencao-semanal-pc</b>
+        <span class="lang-pt">Rotina semanal de manutenção do Windows: limpeza, atualizações e verificação.</span>
+        <span class="lang-en" hidden>Weekly Windows maintenance routine: cleanup, updates and health checks.</span>
+        <em>PowerShell</em>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ ENSINO ============ -->
+  <section id="ensino">
+    <div class="sec-head">
+      <h2><span class="lang-pt">Sala de aula</span><span class="lang-en" hidden>Classroom</span></h2>
+    </div>
+
+    <article class="case">
+      <h3>
+        <span class="lang-pt">Professor de tecnologia, 4 turmas do fundamental</span>
+        <span class="lang-en" hidden>Technology teacher, four middle school classes</span>
+      </h3>
+      <div class="ctx">
+        <span class="lang-pt">Colégio Mutirão de São Marcos · desde 2025</span>
+        <span class="lang-en" hidden>Colégio Mutirão de São Marcos · since 2025</span>
+      </div>
+
+      <p>
+        <span class="lang-pt">A escola não tinha material para a disciplina, então construo o currículo do zero. Cada aula tem plano autoral de 12 seções — objetivos, cronograma por momento, diferenciação por turma, critérios de avaliação e ligação com a aula seguinte. O mesmo tema chega ao 7º ano de forma concreta e ao 9º de forma crítica.</span>
+        <span class="lang-en" hidden>The school had no material for the subject, so I build the curriculum from scratch. Every class has an original 12-section lesson plan — objectives, timed breakdown, differentiation per class, assessment criteria and the link to the next lesson. The same topic reaches 7th grade concretely and 9th grade critically.</span>
+      </p>
+      <p>
+        <span class="lang-pt">Nenhum conceito entra sem uma âncora no dia a dia do aluno, e toda unidade termina em projeto: banco de dados e SQL a partir das próprias férias deles, segurança digital e privacidade, IA com uso consciente, pitch e wireframe. Um dos projetos — um álbum de figurinhas criado e ilustrado pelos alunos — foi publicado como site aberto, com o nome deles.</span>
+        <span class="lang-en" hidden>No concept enters without an anchor in the students' daily life, and every unit ends in a project: databases and SQL built from their own holidays, digital security and privacy, conscious use of AI, pitching and wireframing. One of these projects — a sticker album created and illustrated by the students — was published as an open website, with their names on it.</span>
+      </p>
+
+      <div class="outcome">
+        <p>
+          <span class="lang-pt">Dar aula não é atividade paralela ao trabalho técnico: é o que me obriga a explicar tecnologia sem jargão. Foi isso que mudou como eu escrevo relatório para cliente.</span>
+          <span class="lang-en" hidden>Teaching isn't a side activity to the technical work: it's what forces me to explain technology without jargon. That is what changed the way I write client-facing reports.</span>
+        </p>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============ TRAJETÓRIA ============ -->
+  <section id="trajetoria">
+    <div class="sec-head">
+      <h2><span class="lang-pt">Trajetória</span><span class="lang-en" hidden>Career</span></h2>
+      <p class="sec-intro">
+        <span class="lang-pt">De trocar peça de computador a responder pela infraestrutura de uma empresa inteira. A linha entre uma coisa e outra é mais reta do que parece: sempre foi manter sistema no ar e explicar o que aconteceu.</span>
+        <span class="lang-en" hidden>From swapping computer parts to owning the infrastructure of an entire company. The line between the two is straighter than it looks: it was always about keeping systems up and explaining what happened.</span>
+      </p>
+    </div>
+
+    <div class="tl">
+      <div class="tl-item now">
+        <div class="tl-when">2015 — <span class="lang-pt">hoje</span><span class="lang-en" hidden>present</span></div>
+        <div class="tl-what"><span class="lang-pt">Sócio | Head de Infraestrutura &amp; DevOps</span><span class="lang-en" hidden>Partner | Head of Infrastructure &amp; DevOps</span></div>
+        <div class="tl-where">Hapolo Soluções Digitais</div>
+      </div>
+      <div class="tl-item now">
+        <div class="tl-when">2025 — <span class="lang-pt">hoje</span><span class="lang-en" hidden>present</span></div>
+        <div class="tl-what"><span class="lang-pt">Professor de Laboratório de Criação e Inovação</span><span class="lang-en" hidden>Technology Teacher, Creation and Innovation Lab</span></div>
+        <div class="tl-where">Colégio Mutirão de São Marcos</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">2013 — 2014</div>
+        <div class="tl-what"><span class="lang-pt">Técnico de suporte em TI</span><span class="lang-en" hidden>IT Support Technician</span></div>
+        <div class="tl-where"><span class="lang-pt">Indústria automotiva · suporte a mais de 1.000 usuários, backups e servidor interno</span><span class="lang-en" hidden>Automotive industry · support for 1,000+ users, backups and the internal server</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">2011 — 2013</div>
+        <div class="tl-what"><span class="lang-pt">Técnico em manutenção de computadores</span><span class="lang-en" hidden>Computer Maintenance Technician</span></div>
+        <div class="tl-where"><span class="lang-pt">Duas assistências técnicas · onde comecei a estruturar rotina de backup</span><span class="lang-en" hidden>Two IT service shops · where I started structuring backup routines</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">2017 — 2022</div>
+        <div class="tl-what"><span class="lang-pt">Bacharelado em Criação Digital</span><span class="lang-en" hidden>Bachelor's degree in Digital Creation</span></div>
+        <div class="tl-where">UCS — Universidade de Caxias do Sul</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTATO ============ -->
+  <section id="contato">
+    <div class="sec-head">
+      <h2><span class="lang-pt">Contato</span><span class="lang-en" hidden>Contact</span></h2>
+    </div>
+    <div class="cta">
+      <p>
+        <span class="lang-pt">Aberto a conversar sobre infraestrutura, SRE, suporte técnico especializado e posições que juntem parte técnica com contato direto com cliente.</span>
+        <span class="lang-en" hidden>Open to conversations about infrastructure, SRE, specialist technical support, and roles that combine deep technical work with direct client contact.</span>
+      </p>
+      <div class="links" style="justify-content:center">
+        <a href="mailto:rsoldatellirosa@gmail.com">rsoldatellirosa@gmail.com</a>
+        <a href="https://www.linkedin.com/in/rodrigo-soldatelli-da-rosa/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/rsoldatellirosa" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>São Marcos, RS — Brasil</span>
+    <span>
+      <span class="lang-pt">Trabalho descrito sem dado de cliente, endereço de servidor ou credencial.</span>
+      <span class="lang-en" hidden>Work described without client data, server addresses or credentials.</span>
+    </span>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var btn = document.getElementById('langbtn');
+
+  function apply(lang) {
+    document.documentElement.lang = (lang === 'en') ? 'en' : 'pt-BR';
+    document.querySelectorAll('.lang-pt').forEach(function (el) { el.hidden = (lang === 'en'); });
+    document.querySelectorAll('.lang-en').forEach(function (el) { el.hidden = (lang !== 'en'); });
+    btn.textContent = (lang === 'en') ? 'PT' : 'EN';
+    btn.setAttribute('aria-label', (lang === 'en') ? 'Ver em portugues' : 'View in English');
+    try { localStorage.setItem('lang', lang); } catch (e) {}
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem('lang'); } catch (e) {}
+  var initial = saved || ((navigator.language || 'pt').toLowerCase().indexOf('pt') === 0 ? 'pt' : 'en');
+  apply(initial);
+
+  btn.addEventListener('click', function () {
+    apply(document.documentElement.lang === 'en' ? 'pt' : 'en');
+  });
+})();
+</script>
+
+</body>
+</html>

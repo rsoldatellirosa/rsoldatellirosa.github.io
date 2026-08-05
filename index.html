@@ -262,6 +262,25 @@
   .edu span { font-size: 14px; color: var(--text-soft); display: block; width: 100%; }
   .edu i { font-style: normal; font-size: 12.5px; color: var(--text-mute); font-weight: 600; white-space: nowrap; }
 
+  /* ---------- idiomas ---------- */
+  .langblock { margin-top: 1.1rem; }
+  .langblock-head { display: flex; align-items: baseline; gap: .6rem; margin-bottom: .9rem; }
+  .langblock-head b { font-size: 15.5px; font-weight: 650; }
+  .langlevel {
+    font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+    color: var(--blue); border: 1px solid color-mix(in srgb, var(--blue) 40%, var(--border));
+    background: color-mix(in srgb, var(--blue) 8%, var(--bg-card));
+    border-radius: 999px; padding: .15rem .55rem;
+  }
+  .langitem {
+    border-left: 3px solid var(--blue); background: var(--bg-subtle);
+    border-radius: 0 8px 8px 0; padding: .85rem 1.05rem; margin-bottom: .7rem;
+  }
+  .langitem:last-child { margin-bottom: 0; }
+  .langitem b { display: block; font-size: 14.5px; font-weight: 650; margin-bottom: .3rem; }
+  .langitem p { font-size: 14px; color: var(--text-soft); margin: 0; line-height: 1.6; }
+  .langitem p strong { color: var(--text); font-weight: 600; }
+
   /* ---------- contato ---------- */
   .cta {
     background: var(--bg-card); border: 1px solid var(--border);
@@ -748,13 +767,35 @@
       <i>2017 — 2022</i>
       <span>UCS — Universidade de Caxias do Sul</span>
     </div>
-    <div class="edu">
-      <b><span class="lang-pt">Inglês — nível avançado</span><span class="lang-en" hidden>English — advanced</span></b>
-      <i></i>
-      <span>
-        <span class="lang-pt">Uso profissional diário: sou o ponto de contato técnico da empresa com a DigitalOcean e demais provedores internacionais.</span>
-        <span class="lang-en" hidden>Daily professional use: I am the company's technical point of contact with DigitalOcean and other international providers.</span>
-      </span>
+    <div class="langblock">
+      <div class="langblock-head">
+        <b><span class="lang-pt">Inglês</span><span class="lang-en" hidden>English</span></b>
+        <span class="langlevel"><span class="lang-pt">avançado</span><span class="lang-en" hidden>advanced</span></span>
+      </div>
+
+      <div class="langitem">
+        <b><span class="lang-pt">No trabalho, todo dia</span><span class="lang-en" hidden>At work, every day</span></b>
+        <p>
+          <span class="lang-pt">Sou o ponto de contato técnico da Hapolo com a DigitalOcean e os demais provedores internacionais. Abertura e escalonamento de chamados, negociação e elaboração dos contratos de SLA — <strong>toda essa comunicação acontece em inglês</strong>, e é minha responsabilidade desde o primeiro contato até o acordo fechado.</span>
+          <span class="lang-en" hidden>I am Hapolo's technical point of contact with DigitalOcean and other international providers. Opening and escalating tickets, negotiating and drafting SLA contracts — <strong>all of it happens in English</strong>, and it is mine to own from the first message to the signed agreement.</span>
+        </p>
+      </div>
+
+      <div class="langitem">
+        <b><span class="lang-pt">Base formal</span><span class="lang-en" hidden>Formal training</span></b>
+        <p>
+          <span class="lang-pt">Vários anos de curso particular na <strong>Speakeasy Idiomas</strong>. Comunico ideia técnica de forma clara e direta no idioma — em texto e em conversa.</span>
+          <span class="lang-en" hidden>Several years of private tuition at <strong>Speakeasy Idiomas</strong>. I get a technical idea across clearly and directly in English — in writing and in conversation.</span>
+        </p>
+      </div>
+
+      <div class="langitem">
+        <b><span class="lang-pt">Aqui mesmo</span><span class="lang-en" hidden>Right here</span></b>
+        <p>
+          <span class="lang-pt">Este portfólio está disponível na íntegra em inglês — é só trocar o idioma no topo da página.</span>
+          <span class="lang-en" hidden>This portfolio is available in full in Portuguese as well — just switch the language at the top of the page.</span>
+        </p>
+      </div>
     </div>
   </section>
 

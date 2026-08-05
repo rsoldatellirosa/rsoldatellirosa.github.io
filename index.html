@@ -65,7 +65,7 @@
   .topbar nav { display: flex; gap: 1.1rem; align-items: center; }
   .topbar nav a { font-size: 13px; color: var(--text-soft); text-decoration: none; }
   .topbar nav a:hover { color: var(--accent); }
-  @media (max-width: 720px) { .topbar nav .hide-sm { display: none; } }
+  @media (max-width: 760px) { .topbar nav .hide-sm { display: none; } }
 
   .langbtn {
     border: 1px solid var(--border); background: var(--bg-card); color: var(--text-soft);
@@ -92,14 +92,14 @@
     .hero-top { gap: 1.1rem; }
   }
   header.hero h1 {
-    font-size: clamp(30px, 6vw, 43px); font-weight: 700;
-    letter-spacing: -.025em; line-height: 1.12; margin-bottom: .7rem;
+    font-size: clamp(28px, 5.4vw, 40px); font-weight: 700;
+    letter-spacing: -.025em; line-height: 1.12; margin-bottom: .6rem;
   }
   .headline {
-    font-size: clamp(15px, 2.2vw, 17px); color: var(--accent);
-    font-weight: 600; line-height: 1.5; margin-bottom: .5rem;
+    font-size: clamp(14.5px, 2vw, 16px); color: var(--accent);
+    font-weight: 600; line-height: 1.5; margin-bottom: .45rem;
   }
-  .place { font-size: 14px; color: var(--text-mute); margin-bottom: 1.6rem; }
+  .place { font-size: 14px; color: var(--text-mute); }
 
   .links { display: flex; flex-wrap: wrap; gap: .6rem; }
   .links a {
@@ -157,6 +157,32 @@
   }
   .bullets li b { color: var(--text); font-weight: 650; }
 
+  /* ---------- problemas dentro da experiência ---------- */
+  .probs {
+    margin-top: 1.5rem; padding-top: 1.3rem; border-top: 1px solid var(--border);
+  }
+  .probs-title {
+    font-size: 11.5px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--text-mute); margin-bottom: 1rem;
+  }
+  .prob {
+    border-left: 3px solid var(--green); background: var(--bg-subtle);
+    border-radius: 0 8px 8px 0; padding: .85rem 1.05rem; margin-bottom: .7rem;
+  }
+  .prob:last-of-type { margin-bottom: 0; }
+  .prob b { display: block; font-size: 14.5px; font-weight: 650; margin-bottom: .3rem; color: var(--text); }
+  .prob p { font-size: 14px; color: var(--text-soft); margin: 0; line-height: 1.6; }
+  .prob p strong { color: var(--text); font-weight: 600; }
+
+  .estado {
+    margin-top: 1.1rem; padding: .9rem 1.05rem;
+    background: color-mix(in srgb, var(--green) 9%, var(--bg-card));
+    border: 1px solid color-mix(in srgb, var(--green) 28%, var(--border));
+    border-radius: 8px;
+  }
+  .estado p { font-size: 14.5px; color: var(--text); margin: 0; }
+  .estado b { font-weight: 650; }
+
   .job-skills {
     display: flex; flex-wrap: wrap; gap: .35rem;
     margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--border);
@@ -186,8 +212,6 @@
   }
   .chip.top { border-color: var(--accent); color: var(--accent); font-weight: 600; }
 
-  .skills-note { font-size: 13px; color: var(--text-mute); margin-top: .9rem; }
-
   /* ---------- projetos ---------- */
   .repos { display: grid; grid-template-columns: repeat(auto-fit, minmax(238px, 1fr)); gap: .8rem; }
   .repo-card {
@@ -200,16 +224,6 @@
   .repo-card b { display: block; font-size: 14.5px; font-weight: 650; margin-bottom: .25rem; }
   .repo-card span { display: block; font-size: 13px; color: var(--text-soft); line-height: 1.5; }
   .repo-card em { display: block; font-style: normal; font-size: 11.5px; color: var(--text-mute); margin-top: .5rem; }
-
-  /* ---------- casos (condensados) ---------- */
-  .caso {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-left: 3px solid var(--green);
-    border-radius: 0 10px 10px 0; padding: 1.1rem 1.3rem; margin-bottom: .8rem;
-  }
-  .caso b { display: block; font-size: 15.5px; font-weight: 650; margin-bottom: .35rem; }
-  .caso p { font-size: 14.5px; color: var(--text-soft); margin: 0; }
-  .caso p strong { color: var(--text); font-weight: 600; }
 
   /* ---------- formação ---------- */
   .edu {
@@ -257,8 +271,7 @@
 
   <header class="hero">
     <div class="hero-top">
-      <img class="foto" src="foto.jpg" width="132" height="132"
-           alt="Rodrigo Soldatelli da Rosa">
+      <img class="foto" src="foto.jpg" width="132" height="132" alt="Rodrigo Soldatelli da Rosa">
       <div class="hero-txt">
         <h1>Rodrigo Soldatelli da Rosa</h1>
         <div class="headline">
@@ -307,7 +320,7 @@
       <h2><span class="lang-pt">Experiência</span><span class="lang-en" hidden>Experience</span></h2>
     </div>
 
-    <!-- Hapolo -->
+    <!-- ---------- Hapolo ---------- -->
     <article class="job">
       <div class="job-top">
         <h3><span class="lang-pt">Sócio | Head de Infraestrutura &amp; DevOps</span><span class="lang-en" hidden>Partner | Head of Infrastructure &amp; DevOps</span></h3>
@@ -351,6 +364,41 @@
         </li>
       </ul>
 
+      <div class="probs">
+        <div class="probs-title"><span class="lang-pt">Problemas que resolvi</span><span class="lang-en" hidden>Problems I solved</span></div>
+
+        <div class="prob">
+          <b><span class="lang-pt">Rastreadores "sem atualizar posição" — que não era a plataforma</span><span class="lang-en" hidden>Trackers "not updating position" — which wasn't the platform</span></b>
+          <p>
+            <span class="lang-pt">Um cliente reportou que o GPS ficava parado enquanto a comunicação dava sinal de vida. Investigando até o protocolo binário dos equipamentos, achei dois bugs reais: um de fuso horário (pacotes sem fix chegam com o ano decodificado como 2006, que tinha horário de verão, gravando a data 1 hora no passado) e um de parser lendo o nibble errado do byte de GPS. <strong>Nenhum dos dois era a causa da reclamação</strong> — conferi no banco e derrubei a minha própria hipótese: os aparelhos afetados tinham posição avançando normal, e a causa real era do lado do equipamento, que mandava só heartbeat. Entreguei dois relatórios técnicos ao time do worker e um laudo ao cliente explicando a diferença sem jargão.</span>
+            <span class="lang-en" hidden>A client reported that GPS was frozen while communication showed signs of life. Digging down to the devices' binary protocol, I found two real bugs: a timezone one (packets without a fix arrive with the year decoded as 2006, which had daylight saving, storing the timestamp one hour in the past) and a parser reading the wrong nibble of the GPS byte. <strong>Neither was the cause of the complaint</strong> — I checked the database and disproved my own hypothesis: the affected devices had positions advancing normally, and the real cause was device-side, sending only heartbeats. I delivered two technical reports to the worker team and a written report to the client explaining the difference without jargon.</span>
+          </p>
+        </div>
+
+        <div class="prob">
+          <b><span class="lang-pt">Restauração de dados históricos: de horas manuais para um comando</span><span class="lang-en" hidden>Historical data restore: from manual hours to a single command</span></b>
+          <p>
+            <span class="lang-pt">Quando um cliente pedia relatório de meses atrás, alguém subia um servidor a partir do snapshot de backup, esperava o banco levantar, copiava as tabelas e destruía tudo — na mão, em horas de atenção. Automatizei o ciclo inteiro, com o servidor vivendo só os minutos da cópia (cerca de <strong>US$ 0,60 por execução</strong>). O detalhe que só apareceu testando: a API de cópia retornava sucesso mesmo sem copiar nada, então toda execução passou a ser validada por contagem de linhas no destino.</span>
+            <span class="lang-en" hidden>When a client asked for a report from months back, someone would spin up a server from the backup snapshot, wait for the database, copy the tables and destroy everything — by hand, over hours. I automated the whole cycle, with the server living only for the minutes of the copy (around <strong>US$ 0.60 per run</strong>). The detail that only showed up in testing: the copy API returned success even when it copied nothing, so every run is now validated by a row count on the destination.</span>
+          </p>
+        </div>
+
+        <div class="prob">
+          <b><span class="lang-pt">Auditoria diária de contas cloud: 12 minutos → 45 segundos</span><span class="lang-en" hidden>Daily cloud account audit: 12 minutes → 45 seconds</span></b>
+          <p>
+            <span class="lang-pt">Quatro contas de nuvem, a maior com mais de cem servidores, precisavam de conferência diária de atividades e backups — que na prática ninguém fazia. Automatizei com as contas em paralelo e relatório por email e Slack, destacando ações críticas como destruir, desligar ou reconstruir. A primeira versão levava 12 minutos paginando o histórico inteiro; parar a paginação ao sair da janela de 24 horas derrubou para 45 segundos.</span>
+            <span class="lang-en" hidden>Four cloud accounts, the largest with over a hundred servers, needed a daily check of activity and backups — which in practice nobody did. I automated it with the accounts running in parallel and a report by email and Slack, highlighting critical actions like destroy, power off or rebuild. The first version took 12 minutes paginating the entire history; stopping pagination once outside the 24-hour window brought it down to 45 seconds.</span>
+          </p>
+        </div>
+
+        <div class="estado">
+          <p>
+            <span class="lang-pt"><b>Onde a operação chegou:</b> o que era diagnóstico manual e reação depois da queda hoje é monitoramento próprio em cima de Zabbix e Grafana, com alerta que chega antes do cliente perceber — threshold, espera de confirmação e cooldown para o alerta não virar ruído. A operação roda dentro do SLA acordado com os clientes que dependem da infraestrutura dedicada.</span>
+            <span class="lang-en" hidden><b>Where the operation stands today:</b> what used to be manual diagnosis and reaction after an outage is now custom monitoring on top of Zabbix and Grafana, with alerts arriving before the client notices — threshold, confirmation delay and cooldown so alerts don't become noise. The operation runs within the SLA agreed with the clients who rely on dedicated infrastructure.</span>
+          </p>
+        </div>
+      </div>
+
       <div class="job-skills">
         <span class="tag">Linux</span><span class="tag">DigitalOcean</span><span class="tag">MySQL</span>
         <span class="tag">RabbitMQ</span><span class="tag">Zabbix</span><span class="tag">Grafana</span>
@@ -359,7 +407,7 @@
       </div>
     </article>
 
-    <!-- Mutirão -->
+    <!-- ---------- Mutirão ---------- -->
     <article class="job">
       <div class="job-top">
         <h3><span class="lang-pt">Professor de Laboratório de Criação e Inovação</span><span class="lang-en" hidden>Technology Teacher, Creation and Innovation Lab</span></h3>
@@ -382,10 +430,45 @@
           <span class="lang-en" hidden><b>Topics:</b> artificial intelligence and conscious use, databases and what happens to our data, digital security and privacy, pitching and presenting ideas, wireframing and prototyping, collaborative tools.</span>
         </li>
         <li>
-          <span class="lang-pt"><b>Método:</b> todo conceito técnico ancorado em situação real do dia a dia do aluno, com projeto prático como entrega. Um dos projetos — um álbum de figurinhas criado e ilustrado pelos alunos — foi publicado como site aberto.</span>
-          <span class="lang-en" hidden><b>Method:</b> every technical concept anchored in a real situation from the student's daily life, with a hands-on project as the deliverable. One of these projects — a sticker album created and illustrated by the students — was published as an open website.</span>
+          <span class="lang-pt"><b>Método:</b> todo conceito técnico ancorado em situação real do dia a dia do aluno, com projeto prático como entrega.</span>
+          <span class="lang-en" hidden><b>Method:</b> every technical concept anchored in a real situation from the student's daily life, with a hands-on project as the deliverable.</span>
         </li>
       </ul>
+
+      <div class="probs">
+        <div class="probs-title"><span class="lang-pt">Problemas que resolvi</span><span class="lang-en" hidden>Problems I solved</span></div>
+
+        <div class="prob">
+          <b><span class="lang-pt">Uma disciplina sem material nenhum</span><span class="lang-en" hidden>A subject with no material at all</span></b>
+          <p>
+            <span class="lang-pt">Não havia livro, apostila ou plano de aula para a disciplina. Em vez de improvisar semana a semana, montei uma estrutura reaproveitável: <strong>plano autoral de 12 seções por aula</strong>, com diferenciação por turma embutida — o mesmo tema chega ao 7º ano de forma concreta e ao 9º de forma crítica. Isso transformou preparação de aula em processo, não em esforço isolado.</span>
+            <span class="lang-en" hidden>There was no book, handout or lesson plan for the subject. Instead of improvising week by week, I built a reusable structure: <strong>an original 12-section plan per class</strong>, with differentiation per grade built in — the same topic reaches 7th grade concretely and 9th grade critically. That turned lesson preparation into a process rather than an isolated effort.</span>
+          </p>
+        </div>
+
+        <div class="prob">
+          <b><span class="lang-pt">Conceito abstrato que não colava</span><span class="lang-en" hidden>Abstract concepts that wouldn't stick</span></b>
+          <p>
+            <span class="lang-pt">Banco de dados e privacidade são temas que morrem no quadro. Passei a ancorar cada um numa situação que o aluno vive: as <strong>próprias férias deles viram uma tabela</strong>, e a partir dela entra consulta, filtro e a pergunta de para onde vão esses dados. A mesma aula-mãe vira introdução a SQL no 9º ano e discussão de rastro digital no 7º e 8º.</span>
+            <span class="lang-en" hidden>Databases and privacy are topics that die on the whiteboard. I started anchoring each one in a situation the student lives: <strong>their own holidays become a table</strong>, and from there come queries, filters and the question of where that data goes. The same core lesson becomes an introduction to SQL in 9th grade and a discussion of digital footprint in 7th and 8th.</span>
+          </p>
+        </div>
+
+        <div class="prob">
+          <b><span class="lang-pt">Projeto que termina na gaveta</span><span class="lang-en" hidden>Projects that end up in a drawer</span></b>
+          <p>
+            <span class="lang-pt">Trabalho escolar costuma acabar na entrega. Fechei o ciclo até algo público: os alunos criaram e ilustraram um <strong>álbum de figurinhas da escola, publicado como site aberto</strong>, com o nome deles. Saíram da ideia, passaram pelo design e chegaram a um endereço na internet que dá para mostrar em casa.</span>
+            <span class="lang-en" hidden>School work usually ends at submission. I closed the loop through to something public: the students created and illustrated a <strong>school sticker album, published as an open website</strong>, with their names on it. They went from idea through design to an address on the internet they can show at home.</span>
+          </p>
+        </div>
+
+        <div class="estado">
+          <p>
+            <span class="lang-pt"><b>O que isso me devolve:</b> ensinar me obriga a explicar tecnologia sem jargão para quem não tem obrigação nenhuma de entender. Foi isso que mudou como escrevo laudo técnico e como converso com cliente.</span>
+            <span class="lang-en" hidden><b>What it gives back:</b> teaching forces me to explain technology without jargon to people under no obligation to understand it. That is what changed how I write technical reports and how I talk to clients.</span>
+          </p>
+        </div>
+      </div>
 
       <div class="job-skills">
         <span class="tag"><span class="lang-pt">Metodologia baseada em projetos</span><span class="lang-en" hidden>Project-based learning</span></span>
@@ -393,45 +476,6 @@
         <span class="tag"><span class="lang-pt">Competências socioemocionais</span><span class="lang-en" hidden>Social-emotional skills</span></span>
         <span class="tag"><span class="lang-pt">Comunicação</span><span class="lang-en" hidden>Communication</span></span>
       </div>
-    </article>
-
-    <!-- BEPO -->
-    <article class="job minor">
-      <div class="job-top">
-        <h3><span class="lang-pt">Técnico de suporte em TI</span><span class="lang-en" hidden>IT Support Technician</span></h3>
-        <span class="job-when">2013 — 2014</span>
-      </div>
-      <div class="job-org">Bepo Componentes Automotivos</div>
-      <p>
-        <span class="lang-pt">Suporte técnico interno para <strong>mais de 1.000 usuários</strong> — sistema e hardware. Backups de mais de 1.000 máquinas, com controle dos robôs de backup e das licenças oficiais. Administração do servidor interno (Windows Server), cabeamento, redes e instalação de servidores menores em diversos setores da fábrica.</span>
-        <span class="lang-en" hidden>Internal technical support for <strong>over 1,000 users</strong> — systems and hardware. Backups across 1,000+ machines, managing backup robots and official software licenses. Administration of the internal server (Windows Server), cabling, networking and small server installs across factory sectors.</span>
-      </p>
-    </article>
-
-    <!-- Compumix -->
-    <article class="job minor">
-      <div class="job-top">
-        <h3><span class="lang-pt">Técnico em manutenção de computadores</span><span class="lang-en" hidden>Computer Maintenance Technician</span></h3>
-        <span class="job-when">2013</span>
-      </div>
-      <div class="job-org">Compumix Informática</div>
-      <p>
-        <span class="lang-pt">Comecei a estruturar rotina de backup — controle via Trello, transferência por FTP e Google Drive — e passei a atender também roteadores, redes e impressoras.</span>
-        <span class="lang-en" hidden>I started structuring backup routines — tracking via Trello, file transfer over FTP and Google Drive — and also took on routers, networks and printers.</span>
-      </p>
-    </article>
-
-    <!-- HDI -->
-    <article class="job minor">
-      <div class="job-top">
-        <h3><span class="lang-pt">Técnico em manutenção de computadores</span><span class="lang-en" hidden>Computer Maintenance Technician</span></h3>
-        <span class="job-when">2011 — 2012</span>
-      </div>
-      <div class="job-org">HDI Informática</div>
-      <p>
-        <span class="lang-pt">Meu primeiro emprego na área. Manutenção de computadores, instalação de sistemas operacionais e softwares, montagem de hardware. A HDI também tinha uma escola de informática — dava suporte aos computadores e ao sistema usado nas aulas.</span>
-        <span class="lang-en" hidden>My first job in tech. Computer maintenance, OS and software installs, hardware assembly. HDI also ran a computer school — I supported its machines and the system used in classes.</span>
-      </p>
     </article>
   </section>
 
@@ -577,39 +621,51 @@
     </div>
   </section>
 
-  <!-- ============ CASOS (condensados, no fim) ============ -->
-  <section id="casos">
+  <!-- ============ OUTRAS EXPERIÊNCIAS ============ -->
+  <section id="anteriores">
     <div class="sec-head">
-      <h2><span class="lang-pt">Alguns problemas que resolvi</span><span class="lang-en" hidden>Some problems I solved</span></h2>
+      <h2><span class="lang-pt">Onde comecei</span><span class="lang-en" hidden>Where I started</span></h2>
       <p class="sec-intro">
-        <span class="lang-pt">Trabalho de produção que não vira repositório público. Resumido, sem nome de cliente e sem endereço de servidor.</span>
-        <span class="lang-en" hidden>Production work that can't become a public repository. Summarized, without client names or server addresses.</span>
+        <span class="lang-pt">De trocar peça de computador a responder pela infraestrutura de uma empresa inteira. A linha é mais reta do que parece: sempre foi manter sistema no ar e explicar o que aconteceu.</span>
+        <span class="lang-en" hidden>From swapping computer parts to owning the infrastructure of an entire company. The line is straighter than it looks: it was always about keeping systems up and explaining what happened.</span>
       </p>
     </div>
 
-    <div class="caso">
-      <b><span class="lang-pt">Rastreadores "sem atualizar posição" — que não era a plataforma</span><span class="lang-en" hidden>Trackers "not updating position" — which wasn't the platform</span></b>
+    <article class="job minor">
+      <div class="job-top">
+        <h3><span class="lang-pt">Técnico de suporte em TI</span><span class="lang-en" hidden>IT Support Technician</span></h3>
+        <span class="job-when">2013 — 2014</span>
+      </div>
+      <div class="job-org">Bepo Componentes Automotivos</div>
       <p>
-        <span class="lang-pt">Investigando até o protocolo binário dos equipamentos, achei dois bugs reais: um de fuso horário (pacotes sem fix chegam com ano decodificado como 2006, que tinha horário de verão, gravando a data 1 hora no passado) e um de parser lendo o nibble errado do byte de GPS. <strong>Nenhum dos dois era a causa da reclamação</strong> — verifiquei no banco e a causa real era do lado do equipamento, que mandava só heartbeat. Entreguei dois relatórios técnicos ao time do worker e um laudo ao cliente explicando a diferença sem jargão.</span>
-        <span class="lang-en" hidden>Digging down to the devices' binary protocol, I found two real bugs: a timezone one (packets without a fix arrive with the year decoded as 2006, which had daylight saving, storing the timestamp one hour in the past) and a parser reading the wrong nibble of the GPS byte. <strong>Neither was the cause of the complaint</strong> — I checked the database and the real cause was device-side, sending only heartbeats. I delivered two technical reports to the worker team and a written report to the client explaining the difference without jargon.</span>
+        <span class="lang-pt">Suporte técnico interno para <strong>mais de 1.000 usuários</strong> — sistema e hardware. Backups de mais de 1.000 máquinas, com controle dos robôs de backup e das licenças oficiais. Administração do servidor interno (Windows Server), cabeamento, redes e instalação de servidores menores em diversos setores da fábrica. Foi aqui que começou a aparecer o que hoje é minha rotina: resolver o problema técnico junto com gestores e funcionários, traduzindo entre o que o usuário precisa e o que é tecnicamente possível.</span>
+        <span class="lang-en" hidden>Internal technical support for <strong>over 1,000 users</strong> — systems and hardware. Backups across 1,000+ machines, managing backup robots and official software licenses. Administration of the internal server (Windows Server), cabling, networking and small server installs across factory sectors. This is where what's now my routine started showing up: solving the technical problem together with managers and staff, translating between what the user needs and what's technically possible.</span>
       </p>
-    </div>
+    </article>
 
-    <div class="caso">
-      <b><span class="lang-pt">Restauração de dados históricos: de horas manuais para um comando</span><span class="lang-en" hidden>Historical data restore: from manual hours to one command</span></b>
+    <article class="job minor">
+      <div class="job-top">
+        <h3><span class="lang-pt">Técnico em manutenção de computadores</span><span class="lang-en" hidden>Computer Maintenance Technician</span></h3>
+        <span class="job-when">2013</span>
+      </div>
+      <div class="job-org">Compumix Informática</div>
       <p>
-        <span class="lang-pt">Quando um cliente pedia relatório de meses atrás, alguém subia um servidor do snapshot de backup, esperava o banco levantar, copiava as tabelas e destruía tudo — na mão. Automatizei o ciclo inteiro, com o servidor vivendo só os minutos da cópia (~US$ 0,60 por execução). O detalhe que só apareceu testando: a API retornava sucesso mesmo sem copiar nada, então toda execução passou a ser validada por contagem de linhas no destino.</span>
-        <span class="lang-en" hidden>When a client asked for a report from months back, someone would spin up a server from the backup snapshot, wait for the database, copy the tables and destroy everything — by hand. I automated the whole cycle, with the server living only for the minutes of the copy (~US$ 0.60 per run). The detail that only showed up in testing: the API returned success even when it copied nothing, so every run is now validated by a row count on the destination.</span>
+        <span class="lang-pt">Comecei a estruturar rotina de backup — controle via Trello, transferência por FTP e Google Drive — e passei a atender também roteadores, redes e impressoras.</span>
+        <span class="lang-en" hidden>I started structuring backup routines — tracking via Trello, file transfer over FTP and Google Drive — and also took on routers, networks and printers.</span>
       </p>
-    </div>
+    </article>
 
-    <div class="caso">
-      <b><span class="lang-pt">Auditoria diária de contas cloud: 12 minutos → 45 segundos</span><span class="lang-en" hidden>Daily cloud account audit: 12 minutes → 45 seconds</span></b>
+    <article class="job minor">
+      <div class="job-top">
+        <h3><span class="lang-pt">Técnico em manutenção de computadores</span><span class="lang-en" hidden>Computer Maintenance Technician</span></h3>
+        <span class="job-when">2011 — 2012</span>
+      </div>
+      <div class="job-org">HDI Informática</div>
       <p>
-        <span class="lang-pt">Quatro contas de nuvem, a maior com mais de cem servidores, precisavam de conferência diária de atividades e backups — que ninguém fazia. Automatizei com as contas em paralelo e relatório por email e chat, destacando ações críticas. A primeira versão levava 12 minutos paginando o histórico inteiro; parar a paginação ao sair da janela de 24 horas derrubou para 45 segundos.</span>
-        <span class="lang-en" hidden>Four cloud accounts, the largest with over a hundred servers, needed a daily check of activity and backups — which nobody did. I automated it with the accounts running in parallel and a report by email and chat, highlighting critical actions. The first version took 12 minutes paginating the entire history; stopping pagination once outside the 24-hour window brought it down to 45 seconds.</span>
+        <span class="lang-pt">Meu primeiro emprego na área. Manutenção de computadores, instalação de sistemas operacionais e softwares, montagem de hardware. A HDI também tinha uma escola de informática — dava suporte aos computadores e ao sistema usado nas aulas.</span>
+        <span class="lang-en" hidden>My first job in tech. Computer maintenance, OS and software installs, hardware assembly. HDI also ran a computer school — I supported its machines and the system used in classes.</span>
       </p>
-    </div>
+    </article>
   </section>
 
   <!-- ============ FORMAÇÃO ============ -->

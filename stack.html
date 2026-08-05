@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stack do dia a dia — Rodrigo Soldatelli da Rosa</title>
+<meta name="description" content="As ferramentas que rodam a infraestrutura da Hapolo, a sala de aula do Colégio Mutirão e os projetos pessoais.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+<meta property="og:title" content="Stack do dia a dia — Rodrigo Soldatelli da Rosa">
+<meta property="og:description" content="As ferramentas que rodam a infraestrutura da Hapolo, a sala de aula e os projetos pessoais.">
+<meta property="og:type" content="website">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f5f0;
+    --bg-card: #ffffff;
+    --bg-subtle: #fafaf7;
+    --row-a: #efeee8;
+    --row-b: #e6e3da;
+    --border: #e8e8e3;
+    --text: #1a1a1a;
+    --text-soft: #55534e;
+    --text-mute: #8a8880;
+    --accent: #e05a2b;
+    --radius: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14140f;
+      --bg-card: #1c1c18;
+      --bg-subtle: #232320;
+      --row-a: #1e1e19;
+      --row-b: #262620;
+      --border: #32322c;
+      --text: #f0efe9;
+      --text-soft: #b8b5ac;
+      --text-mute: #86837a;
+      --accent: #ff7a4d;
+    }
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 22px; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+  .topbar .who { font-weight: 600; font-size: 14px; }
+  .topbar nav { display: flex; gap: 1.1rem; align-items: center; }
+  .topbar nav a { font-size: 13px; color: var(--text-soft); text-decoration: none; }
+  .topbar nav a:hover { color: var(--accent); }
+  .langbtn {
+    font: inherit; font-size: 12px; font-weight: 600;
+    padding: 4px 10px; border-radius: 999px;
+    border: 1px solid var(--border); background: var(--bg-card);
+    color: var(--text-soft); cursor: pointer;
+  }
+  .langbtn:hover { color: var(--accent); border-color: var(--accent); }
+  .langbtn:focus-visible, .topbar nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  header.head { padding: 54px 0 30px; }
+  header.head h1 {
+    font-size: clamp(30px, 5vw, 44px);
+    line-height: 1.1; letter-spacing: -0.03em; font-weight: 800;
+    text-wrap: balance;
+  }
+  header.head .sub { margin-top: 10px; color: var(--text-mute); font-size: 15px; max-width: 62ch; }
+
+  .card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+  }
+
+  .row {
+    display: flex; align-items: center; gap: 22px;
+    padding: 18px 22px; border-radius: 13px; min-height: 86px;
+  }
+  .row:nth-child(odd) { background: var(--row-a); }
+  .row:nth-child(even) { background: var(--row-b); }
+  .row + .row { margin-top: 9px; }
+
+  .label { width: 205px; flex: none; font-weight: 700; font-size: 16px; line-height: 1.25; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tool {
+    display: inline-flex; align-items: center; gap: 9px;
+    background: var(--bg-card); border-radius: 10px;
+    padding: 8px 14px 8px 9px;
+    font-size: 14px; font-weight: 600; white-space: nowrap;
+    box-shadow: 0 1px 2px rgba(0,0,0,.06);
+  }
+  .mark {
+    width: 22px; height: 22px; border-radius: 6px; flex: none;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 10.5px; font-weight: 800; letter-spacing: -0.02em;
+  }
+
+  .note {
+    margin: 26px 0 0;
+    padding: 18px 22px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    color: var(--text-soft);
+    font-size: 14.5px;
+    max-width: 68ch;
+  }
+
+  footer {
+    margin: 40px 0 60px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; gap: 14px;
+    align-items: baseline; justify-content: space-between;
+    font-size: 14px; color: var(--text-soft);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 760px) {
+    .topbar nav .hide-sm { display: none; }
+    .row { flex-direction: column; align-items: flex-start; gap: 12px; padding: 16px; }
+    .label { width: auto; }
+  }
+
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="who">Rodrigo Soldatelli da Rosa</span>
+    <nav>
+      <a href="index.html" class="hide-sm"><span class="lang-pt">← Portfólio</span><span class="lang-en" hidden>← Portfolio</span></a>
+      <a href="index.html#projetos" class="hide-sm"><span class="lang-pt">Projetos</span><span class="lang-en" hidden>Projects</span></a>
+      <a href="index.html#contato" class="hide-sm"><span class="lang-pt">Contato</span><span class="lang-en" hidden>Contact</span></a>
+      <button class="langbtn" id="langbtn" type="button">EN</button>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="head">
+    <h1>
+      <span class="lang-pt">Stack do dia a dia</span>
+      <span class="lang-en" hidden>My daily stack</span>
+    </h1>
+    <p class="sub">
+      <span class="lang-pt">O que roda a infraestrutura da Hapolo, a sala de aula do Colégio Mutirão e os projetos que eu construo em casa.</span>
+      <span class="lang-en" hidden>What runs Hapolo's infrastructure, my classroom at Colégio Mutirão, and the projects I build at home.</span>
+    </p>
+  </header>
+
+  <div class="card">
+
+    <div class="row">
+      <div class="label"><span class="lang-pt">Infraestrutura &amp; Cloud</span><span class="lang-en" hidden>Infrastructure &amp; Cloud</span></div>
+      <div class="tools">
+        <span class="tool"><span class="mark" style="background:#0080FF">DO</span>DigitalOcean</span>
+        <span class="tool"><span class="mark" style="background:#E95420">U</span>Ubuntu / Debian</span>
+        <span class="tool"><span class="mark" style="background:#009639">N</span>Nginx</span>
+        <span class="tool"><span class="mark" style="background:#2c2c2c">SSH</span>OpenSSH</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="label"><span class="lang-pt">Acesso &amp; Terminal</span><span class="lang-en" hidden>Access &amp; Terminal</span></div>
+      <div class="tools">
+        <span class="tool"><span class="mark" style="background:#E95420">WSL</span>WSL (Ubuntu)</span>
+        <span class="tool"><span class="mark" style="background:#012456">WT</span>Windows Terminal</span>
+        <span class="tool"><span class="mark" style="background:#5c5c5c">Pu</span>PuTTY</span>
+        <span class="tool"><span class="mark" style="background:#0071ff">RD</span>RustDesk</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="label"><span class="lang-pt">Observabilidade</span><span class="lang-en" hidden>Observability</span></div>
+      <div class="tools">
+        <span class="tool"><span class="mark" style="background:#D40000">Z</span>Zabbix</span>
+        <span class="tool"><span class="mark" style="background:#F46800">G</span>Grafana</span>
+        <span class="tool"><span class="mark" style="background:#e05a2b">IM</span>infra-monitors</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="label"><span class="lang-pt">Dados &amp; Mensageria</span><span class="lang-en" hidden>Data &amp; Messaging</span></div>
+      <div class="tools">
+        <span class="tool"><span class="mark" style="background:#00758F">My</span>MySQL</span>
+        <span class="tool"><span class="mark" style="background:#336791">Pg</span>PostgreSQL</span>
+        <span class="tool"><span class="mark" style="background:#3ECF8E">S</span>Supabase</span>
+        <span class="tool"><span class="mark" style="background:#D82C20">R</span>Redis</span>
+        <span class="tool"><span class="mark" style="background:#FF6600">Rb</span>RabbitMQ</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="label"><span class="lang-pt">Automação</span><span class="lang-en" hidden>Automation</span></div>
+      <div class="tools">
+        <span class="tool"><span class="mark" style="background:#3776AB">Py</span>Python</span>
+        <span class="tool"><span class="mark" style="background:#4EAA25">$</span>Bash</span>
+        <span class="tool"><span class="mark" style="background:#5391FE">PS</span>PowerShell</span>
+        <span class="tool"><span class="mark" style="background:#2088FF">GA</span>GitHub Actions</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="label"><span class="lang-pt">IA no dia a dia</span><span class="lang-en" hidden>AI in daily work</span></div>
+      <div class="tools">
+        <span class="tool"><span class="mark" style="background:#D97757">C</span>Claude Code</span>
+        <span class="tool"><span class="mark" style="background:#1a1a1a">A</span><span class="lang-pt">API da Anthropic</span><span class="lang-en" hidden>Anthropic API</span></span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="label"><span class="lang-pt">Desenvolvimento</span><span class="lang-en" hidden>Development</span></div>
+      <div class="tools">
+        <span class="tool"><span class="mark" style="background:#1a1a1a">N</span>Next.js</span>
+        <span class="tool"><span class="mark" style="background:#3178C6">TS</span>TypeScript</span>
+        <span class="tool"><span class="mark" style="background:#181717">GH</span>GitHub + gh CLI</span>
+        <span class="tool"><span class="mark" style="background:#1a1a1a">V</span>Vercel</span>
+        <span class="tool"><span class="mark" style="background:#007ACC">VS</span>VS Code</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="label"><span class="lang-pt">Operação &amp; Processos</span><span class="lang-en" hidden>Operations &amp; Process</span></div>
+      <div class="tools">
+        <span class="tool"><span class="mark" style="background:#0052CC">T</span>Trello</span>
+        <span class="tool"><span class="mark" style="background:#4A154B">S</span>Slack</span>
+        <span class="tool"><span class="mark" style="background:#4285F4">W</span>Google Workspace</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="label"><span class="lang-pt">Sala de aula</span><span class="lang-en" hidden>Classroom</span></div>
+      <div class="tools">
+        <span class="tool"><span class="mark" style="background:#1FA463">D</span>Google Drive</span>
+        <span class="tool"><span class="mark" style="background:#0052CC">T</span>Trello</span>
+        <span class="tool"><span class="mark" style="background:#181717">GP</span>GitHub Pages</span>
+        <span class="tool"><span class="mark" style="background:#00758F">SQL</span>MySQL</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="label"><span class="lang-pt">Feitos por mim</span><span class="lang-en" hidden>Built by me</span></div>
+      <div class="tools">
+        <span class="tool"><span class="mark" style="background:#e05a2b">In</span>Insights</span>
+        <span class="tool"><span class="mark" style="background:#e05a2b">TV</span>TV Tracker</span>
+        <span class="tool"><span class="mark" style="background:#e05a2b">DB</span>Daily Briefing</span>
+        <span class="tool"><span class="mark" style="background:#e05a2b">Al</span><span class="lang-pt">Álbum Copa 2026</span><span class="lang-en" hidden>World Cup 2026 Album</span></span>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="note">
+    <span class="lang-pt">A última linha é de propósito: quando a ferramenta pronta deixou de resolver, eu construí a minha. O Insights nasceu de uma página de anotações que não dava mais conta, e o TV Tracker de um app que saiu do ar levando anos de histórico junto.</span>
+    <span class="lang-en" hidden>The last row is deliberate: when the off-the-shelf tool stopped solving the problem, I built my own. Insights came out of a notes page that no longer kept up, and TV Tracker out of an app that shut down and took years of history with it.</span>
+  </p>
+
+  <footer>
+    <span>
+      <span class="lang-pt">Infraestrutura que avisa antes do cliente perceber.</span>
+      <span class="lang-en" hidden>Infrastructure that alerts before the client notices.</span>
+    </span>
+    <span>
+      <a href="index.html"><span class="lang-pt">Voltar ao portfólio</span><span class="lang-en" hidden>Back to the portfolio</span></a>
+      ·
+      <a href="https://github.com/rsoldatellirosa" target="_blank" rel="noopener">GitHub</a>
+      ·
+      <a href="https://www.linkedin.com/in/rodrigo-soldatelli-da-rosa/" target="_blank" rel="noopener">LinkedIn</a>
+    </span>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var btn = document.getElementById('langbtn');
+
+  function apply(lang) {
+    document.documentElement.lang = (lang === 'en') ? 'en' : 'pt-BR';
+    document.querySelectorAll('.lang-pt').forEach(function (el) { el.hidden = (lang === 'en'); });
+    document.querySelectorAll('.lang-en').forEach(function (el) { el.hidden = (lang !== 'en'); });
+    btn.textContent = (lang === 'en') ? 'PT' : 'EN';
+    btn.setAttribute('aria-label', (lang === 'en') ? 'Ver em portugues' : 'View in English');
+    try { localStorage.setItem('lang', lang); } catch (e) {}
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem('lang'); } catch (e) {}
+  var initial = saved || ((navigator.language || 'pt').toLowerCase().indexOf('pt') === 0 ? 'pt' : 'en');
+  apply(initial);
+
+  btn.addEventListener('click', function () {
+    apply(document.documentElement.lang === 'en' ? 'pt' : 'en');
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -120,6 +120,9 @@
     padding-bottom: .55rem; border-bottom: 1px solid var(--border);
   }
   .sec-intro { font-size: 15px; color: var(--text-soft); margin-top: .9rem; max-width: 64ch; }
+  .sec-intro a { color: var(--accent); text-decoration: none; font-weight: 600; white-space: nowrap; }
+  .sec-intro a:hover { text-decoration: underline; }
+  .sec-intro a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   .about p { font-size: 16px; color: var(--text-soft); margin-bottom: .9rem; max-width: 66ch; }
   .about p:last-child { margin-bottom: 0; }
@@ -484,8 +487,10 @@
     <div class="sec-head">
       <h2><span class="lang-pt">Competências</span><span class="lang-en" hidden>Skills</span></h2>
       <p class="sec-intro">
-        <span class="lang-pt">Em destaque, as cinco que definem o que eu faço todo dia.</span>
-        <span class="lang-en" hidden>Highlighted, the five that define what I do every day.</span>
+        <span class="lang-pt">Em destaque, as cinco que definem o que eu faço todo dia.
+          <a href="stack.html">Ver as ferramentas que eu abro todo dia →</a></span>
+        <span class="lang-en" hidden>Highlighted, the five that define what I do every day.
+          <a href="stack.html">See the tools I open every day →</a></span>
       </p>
     </div>
 

@@ -26,19 +26,18 @@
     --radius: 12px;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #23201C;
-      --bg-card: #2C2823;
-      --bg-subtle: #2A2621;
-      --row-a: #2A2621;
-      --row-b: #322D27;
-      --border: #3D372F;
-      --text: #F0E9DF;
-      --text-soft: #BCB1A2;
-      --text-mute: #8B8171;
-      --accent: #E8875A;
-    }
+  /* claro e o padrao; o escuro so entra quando a pessoa escolhe no botao */
+  :root[data-theme="dark"] {
+    --bg: #23201C;
+    --bg-card: #2C2823;
+    --bg-subtle: #2A2621;
+    --row-a: #2A2621;
+    --row-b: #322D27;
+    --border: #3D372F;
+    --text: #F0E9DF;
+    --text-soft: #BCB1A2;
+    --text-mute: #8B8171;
+    --accent: #E8875A;
   }
 
   html { scroll-behavior: smooth; }
@@ -71,6 +70,8 @@
     color: var(--text-soft); cursor: pointer;
   }
   .langbtn:hover { color: var(--accent); border-color: var(--accent); }
+  .themebtn { display: inline-flex; align-items: center; justify-content: center; padding: 4px 8px; }
+  .themebtn svg { display: block; }
   .langbtn:focus-visible, .topbar nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   header.head { padding: 54px 0 30px; }
@@ -115,11 +116,9 @@
     color: var(--accent);
     background: color-mix(in srgb, var(--accent) 14%, transparent);
   }
-  @media (prefers-color-scheme: dark) {
-    svg.mark.invertible { fill: #F0E9DF; }
-    /* monogramas de marca escura (Slack, Windows Terminal, SSH) sumiriam no fundo barro */
-    .mark.mono:not(.own) { filter: brightness(1.5) saturate(.95); }
-  }
+  :root[data-theme="dark"] svg.mark.invertible { fill: #F0E9DF; }
+  /* monogramas de marca escura (Slack, Windows Terminal, SSH) sumiriam no fundo barro */
+  :root[data-theme="dark"] .mark.mono:not(.own) { filter: brightness(1.5) saturate(.95); }
 
   .note {
     margin: 26px 0 0;
@@ -162,6 +161,15 @@
       <a href="index.html#projetos" class="hide-sm"><span class="lang-pt">Projetos</span><span class="lang-en" hidden>Projects</span></a>
       <a href="index.html#contato" class="hide-sm"><span class="lang-pt">Contato</span><span class="lang-en" hidden>Contact</span></a>
       <button class="langbtn" id="langbtn" type="button">EN</button>
+      <button class="langbtn themebtn" id="themebtn" type="button" title="Alternar tema">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+          <path class="ico-moon" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+          <g class="ico-sun" hidden>
+            <circle cx="12" cy="12" r="4.2"/>
+            <path d="M12 1.6v3.1M12 19.3v3.1M4.65 4.65l2.2 2.2M17.15 17.15l2.2 2.2M1.6 12h3.1M19.3 12h3.1M4.65 19.35l2.2-2.2M17.15 6.85l2.2-2.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+          </g>
+        </svg>
+      </button>
     </nav>
   </div>
 </div>
@@ -324,6 +332,28 @@
 
   btn.addEventListener('click', function () {
     apply(document.documentElement.lang === 'en' ? 'pt' : 'en');
+  });
+
+  // tema: claro por padrao; o escuro so por escolha, e fica salvo
+  var tbtn = document.getElementById('themebtn');
+  var moon = document.querySelector('.ico-moon');
+  var sun = document.querySelector('.ico-sun');
+
+  function applyTheme(theme) {
+    var dark = (theme === 'dark');
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    moon.hidden = dark;
+    sun.hidden = !dark;
+    tbtn.setAttribute('aria-label', dark ? 'Usar tema claro' : 'Usar tema escuro');
+    try { localStorage.setItem('theme', theme); } catch (e) {}
+  }
+
+  var savedTheme = null;
+  try { savedTheme = localStorage.getItem('theme'); } catch (e) {}
+  applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
+
+  tbtn.addEventListener('click', function () {
+    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
   });
 })();
 </script>

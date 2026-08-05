@@ -26,19 +26,18 @@
     --radius: 12px;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #23201C;
-      --bg-card: #2C2823;
-      --bg-subtle: #2A2621;
-      --border: #3D372F;
-      --text: #F0E9DF;
-      --text-soft: #BCB1A2;
-      --text-mute: #8B8171;
-      --accent: #E8875A;
-      --blue: #7FA8BE;
-      --green: #98B78B;
-    }
+  /* claro e o padrao; o escuro so entra quando a pessoa escolhe no botao */
+  :root[data-theme="dark"] {
+    --bg: #23201C;
+    --bg-card: #2C2823;
+    --bg-subtle: #2A2621;
+    --border: #3D372F;
+    --text: #F0E9DF;
+    --text-soft: #BCB1A2;
+    --text-mute: #8B8171;
+    --accent: #E8875A;
+    --blue: #7FA8BE;
+    --green: #98B78B;
   }
 
   html { scroll-behavior: smooth; }
@@ -73,6 +72,8 @@
     padding: 5px 11px; border-radius: 999px; cursor: pointer; white-space: nowrap;
   }
   .langbtn:hover { border-color: var(--accent); color: var(--accent); }
+  .themebtn { display: inline-flex; align-items: center; justify-content: center; padding: 4px 8px; }
+  .themebtn svg { display: block; }
 
   /* ---------- hero ---------- */
   header.hero { padding: 4rem 0 2.5rem; }
@@ -128,7 +129,7 @@
   }
   .stackmore:hover { text-decoration: underline; }
   .stackmore:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  @media (prefers-color-scheme: dark) { .stackstrip svg.invertible { fill: #F0E9DF; } }
+  :root[data-theme="dark"] .stackstrip svg.invertible { fill: #F0E9DF; }
   @media (max-width: 560px) { .stackstrip { gap: .85rem; } .stackstrip svg { width: 19px; height: 19px; } }
 
   /* ---------- seções ---------- */
@@ -308,6 +309,15 @@
       <a href="#projetos" class="hide-sm"><span class="lang-pt">Projetos</span><span class="lang-en" hidden>Projects</span></a>
       <a href="#contato" class="hide-sm"><span class="lang-pt">Contato</span><span class="lang-en" hidden>Contact</span></a>
       <button class="langbtn" id="langbtn" type="button">EN</button>
+      <button class="langbtn themebtn" id="themebtn" type="button" title="Alternar tema">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+          <path class="ico-moon" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+          <g class="ico-sun" hidden>
+            <circle cx="12" cy="12" r="4.2"/>
+            <path d="M12 1.6v3.1M12 19.3v3.1M4.65 4.65l2.2 2.2M17.15 17.15l2.2 2.2M1.6 12h3.1M19.3 12h3.1M4.65 19.35l2.2-2.2M17.15 6.85l2.2-2.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+          </g>
+        </svg>
+      </button>
     </nav>
   </div>
 </div>
@@ -847,6 +857,28 @@
 
   btn.addEventListener('click', function () {
     apply(document.documentElement.lang === 'en' ? 'pt' : 'en');
+  });
+
+  // tema: claro por padrao; o escuro so por escolha, e fica salvo
+  var tbtn = document.getElementById('themebtn');
+  var moon = document.querySelector('.ico-moon');
+  var sun = document.querySelector('.ico-sun');
+
+  function applyTheme(theme) {
+    var dark = (theme === 'dark');
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    moon.hidden = dark;
+    sun.hidden = !dark;
+    tbtn.setAttribute('aria-label', dark ? 'Usar tema claro' : 'Usar tema escuro');
+    try { localStorage.setItem('theme', theme); } catch (e) {}
+  }
+
+  var savedTheme = null;
+  try { savedTheme = localStorage.getItem('theme'); } catch (e) {}
+  applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
+
+  tbtn.addEventListener('click', function () {
+    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
   });
 })();
 </script>

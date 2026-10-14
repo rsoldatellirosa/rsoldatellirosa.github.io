@@ -259,6 +259,25 @@
   .repo-card span { display: block; font-size: 13px; color: var(--text-soft); line-height: 1.5; }
   .repo-card em { display: block; font-style: normal; font-size: 11.5px; color: var(--text-mute); margin-top: .5rem; }
 
+  /* ---------- destaque Aulia ---------- */
+  .aulia-feature {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent); border-radius: 10px;
+    padding: 1.25rem 1.4rem; margin-bottom: 1.2rem;
+    transition: border-color .15s, transform .15s;
+  }
+  .aulia-feature:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .aulia-feature:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .af-head { display: flex; align-items: baseline; gap: .7rem; margin-bottom: .5rem; }
+  .af-head b { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
+  .af-live { display: inline-flex; align-items: center; gap: .35rem; font-size: 11.5px; color: var(--text-mute); }
+  .af-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .af-desc { font-size: 14px; color: var(--text-soft); line-height: 1.55; max-width: 66ch; margin: 0; }
+  .aulia-feature em { display: block; font-style: normal; font-size: 11.5px; color: var(--text-mute); margin-top: .7rem; }
+  .af-go { display: inline-block; margin-top: .7rem; font-size: 13px; font-weight: 600; color: var(--accent); }
+  .repos-note { font-size: 13px; color: var(--text-mute); margin: 0 0 .8rem; }
+
   /* ---------- formação ---------- */
   .edu {
     background: var(--bg-card); border: 1px solid var(--border);
@@ -669,10 +688,28 @@
     <div class="sec-head">
       <h2><span class="lang-pt">Projetos</span><span class="lang-en" hidden>Projects</span></h2>
       <p class="sec-intro">
-        <span class="lang-pt">Ferramentas de infraestrutura publicadas em versão sanitizada, com configuração externa — e aplicações próprias que eu uso de verdade. Todas sob licença MIT.</span>
-        <span class="lang-en" hidden>Infrastructure tooling published in sanitized form, with external configuration — and personal applications I actually use. All MIT licensed.</span>
+        <span class="lang-pt">O que construí por conta própria: o Aulia, meu produto no ar, e as ferramentas de infraestrutura e os apps menores que uso no dia a dia.</span>
+        <span class="lang-en" hidden>What I've built on my own: Aulia, my live product, and the infrastructure tools and smaller apps I use day to day.</span>
       </p>
     </div>
+
+    <a class="aulia-feature" href="https://aulia.app.br/?ref=portfolio" target="_blank" rel="noopener">
+      <div class="af-head">
+        <b>Aulia</b>
+        <span class="af-live"><span class="af-dot" aria-hidden="true"></span><span class="lang-pt">No ar</span><span class="lang-en" hidden>Live</span></span>
+      </div>
+      <p class="af-desc">
+        <span class="lang-pt">SaaS de planejamento de aulas, de professor para professor. Desenhado e mantido sozinho: site e aplicativo Android, plano gratuito e pago com Mercado Pago, e rascunho de aula com inteligência artificial que o professor revisa e ajusta.</span>
+        <span class="lang-en" hidden>A lesson-planning SaaS, built for teachers by a teacher. Designed and run solo: web and Android app, free and paid plans with Mercado Pago, and AI-assisted lesson drafts the teacher reviews and adjusts.</span>
+      </p>
+      <em>Next.js · TypeScript · Supabase · Claude API · Mercado Pago</em>
+      <span class="af-go"><span class="lang-pt">Abrir aulia.app.br</span><span class="lang-en" hidden>Open aulia.app.br</span> <span aria-hidden="true">↗</span></span>
+    </a>
+
+    <p class="repos-note">
+      <span class="lang-pt">Ferramentas de infra e apps menores, publicados em versão sanitizada e sob licença MIT.</span>
+      <span class="lang-en" hidden>Infra tools and smaller apps, published in sanitized form under the MIT license.</span>
+    </p>
 
     <div class="repos">
       <a class="repo-card" href="https://github.com/rsoldatellirosa/infra-monitors" target="_blank" rel="noopener">

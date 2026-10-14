@@ -269,7 +269,8 @@
   }
   .aulia-feature:hover { border-color: var(--accent); transform: translateY(-1px); }
   .aulia-feature:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .af-head { display: flex; align-items: baseline; gap: .7rem; margin-bottom: .5rem; }
+  .af-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .5rem; }
+  .af-logo { height: 32px; width: auto; flex: none; }
   .af-head b { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
   .af-live { display: inline-flex; align-items: center; gap: .35rem; font-size: 11.5px; color: var(--text-mute); }
   .af-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
@@ -421,6 +422,10 @@
       <p>
         <span class="lang-pt">Em paralelo, sou professor de tecnologia no ensino fundamental, com currículo autoral construído do zero. Ensinar me obriga a explicar tecnologia sem jargão — e isso mudou como escrevo relatório técnico e como converso com cliente.</span>
         <span class="lang-en" hidden>In parallel, I teach technology in middle school, with an original curriculum built from scratch. Teaching forces me to explain technology without jargon — and that changed how I write technical reports and how I talk to clients.</span>
+      </p>
+      <p>
+        <span class="lang-pt">Agora construo o <strong>Aulia</strong>, um SaaS de planejamento de aulas para professores. Ele nasceu da mesma prática que tenho na infraestrutura, organizar e manter sistemas em ordem, voltada para uma dor que eu mesmo sinto em sala. Juntei a minha experiência de organização com a de tecnologia para resolver isso, e o Aulia já está no ar, com professores usando.</span>
+        <span class="lang-en" hidden>Now I'm building <strong>Aulia</strong>, a lesson-planning SaaS for teachers. It grew out of the same thing I do in infrastructure, keeping systems organized and running, turned toward a pain I feel in the classroom myself. I combined my experience in organization with technology to solve it, and Aulia is already live, with teachers using it.</span>
       </p>
     </div>
   </section>
@@ -695,6 +700,11 @@
 
     <a class="aulia-feature" href="https://aulia.app.br/?ref=portfolio" target="_blank" rel="noopener">
       <div class="af-head">
+        <svg class="af-logo" viewBox="0 0 38 32" aria-hidden="true" focusable="false">
+          <rect x="0" y="11" width="10" height="21" rx="3" fill="#EBA53B"></rect>
+          <rect x="14" y="1" width="10" height="31" rx="3" fill="#E2571E"></rect>
+          <rect x="28" y="17" width="10" height="15" rx="3" fill="#2C5FA8"></rect>
+        </svg>
         <b>Aulia</b>
         <span class="af-live"><span class="af-dot" aria-hidden="true"></span><span class="lang-pt">No ar</span><span class="lang-en" hidden>Live</span></span>
       </div>

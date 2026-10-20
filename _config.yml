@@ -1,0 +1,9 @@
+# Keep development sources out of the GitHub Pages output.
+exclude:
+  - src
+  - tools
+  - node_modules
+  - package.json
+  - package-lock.json
+  - README.md
+  - BACKUP.md

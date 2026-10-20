@@ -37,6 +37,7 @@ function load(file, storage = new Map(), state, options = {}) {
   vm.runInNewContext(script, {
     document: { getElementById: id => tree.querySelector('#' + id) },
     window: {
+      location: options.location,
       matchMedia: query => ({ matches:query === '(prefers-reduced-motion: reduce)' && !!options.reducedMotion }),
       addEventListener: (type, callback) => { events[type] = callback; },
       localStorage: { getItem: key => storage.get(key) || null, setItem: (key, value) => storage.set(key, value) },
@@ -203,3 +204,23 @@ iconTiles.forEach((tile, index) => {
 assert.equal(exportedLanding.querySelectorAll('i[data-lucide]').length, 0, 'Standalone HTML must not depend on host icon initialization');
 assert(exportedLanding.querySelector('.entrada-location svg[data-icon="map-pin"]'));
 console.log('PASS: six nonempty, theme-aware static feature icons and location marker; no unresolved icon placeholders.');
+
+const incoming = [];
+for (const section of ['sobre','experiencia','competencias','projetos','anteriores','formacao','contato']) {
+  load(path.join(__dirname, previewName, 'index.html'), new Map(), undefined, {
+    location: { hash:'#' + section, search:'?ref=linkedin', replace:url => incoming.push(url) }
+  });
+  assert.equal(incoming.at(-1), 'portfolio.html?ref=linkedin#' + section);
+}
+const preservedIncoming = incoming.length;
+for (const hash of ['', '#entrada-ensino', '#entrada-aulia', '#entrada-contato', '#portfolio-entrada']) {
+  load(path.join(__dirname, previewName, 'index.html'), new Map(), undefined, {
+    location: { hash, search:'', replace:url => incoming.push(url) }
+  });
+}
+assert.equal(incoming.length, preservedIncoming, 'Landing links and the homepage keep their original URL');
+load(path.join(__dirname, previewName, 'portfolio.html'), new Map(), undefined, {
+  location: { hash:'#experiencia', search:'', replace:url => incoming.push(url) }
+});
+assert.equal(incoming.length, preservedIncoming, 'The full portfolio must not redirect to itself');
+console.log('PASS: old homepage section links preserve their destination and referral parameters; no redirect loop.');

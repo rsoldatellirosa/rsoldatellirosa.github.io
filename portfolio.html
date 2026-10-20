@@ -1053,6 +1053,18 @@ html,body{margin:0;background:#111319}
   let language = 'pt';
   let theme = 'dark';
   let currentPage = views.find(view => !view.hidden).dataset.page;
+  // Existing links to the original homepage sections keep their destination.
+  function redirectOriginalSection() {
+    if (views.length !== 1 || currentPage !== 'index' || !window.location) return false;
+    const originalSections = ['sobre','experiencia','competencias','projetos','anteriores','formacao','contato'];
+    const section = window.location.hash.slice(1);
+    if (!originalSections.includes(section)) return false;
+    window.location.replace('portfolio.html' + window.location.search + '#' + section);
+    return true;
+  }
+  if (redirectOriginalSection()) return;
+  window.addEventListener('hashchange', redirectOriginalSection);
+
   function scrollToTarget(target) {
     const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     target.scrollIntoView({ behavior:reduceMotion ? 'instant' : 'smooth', block:'start' });

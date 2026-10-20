@@ -1,2 +1,7 @@
 CLAUDE.md
 .claude/
+node_modules/
+__pycache__/
+*.pyc
+*.log
+backups/

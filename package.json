@@ -1,0 +1,16 @@
+{
+  "name": "rodrigo-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fontes e verificações do portfólio pessoal de Rodrigo Soldatelli da Rosa.",
+  "scripts": {
+    "build": "python tools/build-portfolio-duplo.py",
+    "test": "node tools/verify-portfolio-interacoes.cjs",
+    "icons": "node tools/build-portfolio-icons.cjs",
+    "dev": "python -m http.server 8765 --bind 127.0.0.1"
+  },
+  "devDependencies": {
+    "lucide": "1.8.0",
+    "node-html-parser": "6.1.13"
+  }
+}

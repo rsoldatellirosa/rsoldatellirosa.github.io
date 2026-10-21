@@ -14,8 +14,9 @@ baseline = (folder/'portfolio-fiel/index.html').read_text(encoding='utf-8')
 stack_baseline = (folder/'portfolio-fiel/stack.html').read_text(encoding='utf-8')
 original = (original_folder/'index.html').read_text(encoding='utf-8')
 original_stack = (original_folder/'stack.html').read_text(encoding='utf-8')
-favicon = next(line.strip() for line in original.splitlines() if '<link rel="icon"' in line)
-assert favicon in original_stack, 'Original favicon differs between pages'
+favicon = '<link rel="icon" href="favicon.ico?v=rs1" sizes="16x16 32x32 48x48 64x64"><link rel="icon" type="image/png" sizes="256x256" href="assets/favicon-rs.png">'
+for favicon_asset in ('favicon.ico', 'assets/favicon-rs.png'):
+    assert (folder.parent/favicon_asset).is_file(), 'Missing RS favicon: '+favicon_asset
 reference = True
 template_name = 'portfolio-cinematico-template.html' if reference else 'portfolio-entrada-template.html'
 css_name = 'portfolio-cinematico.css' if reference else 'portfolio-entrada.css'
@@ -144,7 +145,7 @@ for name,markup in views.items():
         if name == 'portfolio':
             page_css += '\n#portfolio-fiel .foto{object-position:50% 8%}'
     page = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rodrigo Soldatelli da Rosa'+(' | Portfólio completo' if name=='portfolio' else ' | Stack' if name=='stack' else ' | Infraestrutura &amp; DevOps')+'</title>'+favicon+'<style>'+page_css+'\nhtml,body{margin:0;background:#111319}\n#portfolio-duas-paginas [hidden]{display:none!important}</style></head><body><div id="portfolio-duas-paginas">'+wrap_view(name,markup)+'</div><script>'+script+'</script></body></html>'
-    assert page.count(favicon) == 1, 'Original favicon must be preserved'
+    assert page.count(favicon) == 1, 'RS favicon must be included once'
     (output_folder/(name+'.html')).write_text(page,encoding='utf-8')
 
 class Inspect(HTMLParser):

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rodrigo Soldatelli da Rosa | Portfólio completo</title><meta property="og:type" content="website"><meta property="og:url" content="https://rsoldatellirosa.github.io/portfolio.html"><meta property="og:title" content="Rodrigo Soldatelli da Rosa | Portfólio completo"><meta property="og:description" content="Sócio e Head de Infraestrutura na Hapolo. Centenas de servidores Linux em nuvem, DevOps, DBA MySQL e observabilidade. PT e EN."><meta property="og:image" content="https://rsoldatellirosa.github.io/og2.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Portfólio de Rodrigo Soldatelli da Rosa, Infraestrutura e DevOps."><meta property="og:locale" content="pt_BR"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://rsoldatellirosa.github.io/og2.png"><link rel="icon" href="favicon.ico?v=rs1" sizes="16x16 32x32 48x48 64x64"><link rel="icon" type="image/png" sizes="256x256" href="assets/favicon-rs.png"><text y='.9em' font-size='90'>⚙️</text></svg>"><style>@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap');
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rodrigo Soldatelli da Rosa | Portfólio completo</title><meta property="og:type" content="website"><meta property="og:url" content="https://rsoldatellirosa.github.io/portfolio.html"><meta property="og:title" content="Rodrigo Soldatelli da Rosa | Portfólio completo"><meta property="og:description" content="Sócio e Head de Infraestrutura na Hapolo. Centenas de servidores Linux em nuvem, DevOps, DBA MySQL e observabilidade. PT e EN."><meta property="og:image" content="https://rsoldatellirosa.github.io/og2.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Portfólio de Rodrigo Soldatelli da Rosa, Infraestrutura e DevOps."><meta property="og:locale" content="pt_BR"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://rsoldatellirosa.github.io/og2.png"><link rel="icon" href="favicon.ico?v=rs1" sizes="16x16 32x32 48x48 64x64"><link rel="icon" type="image/png" sizes="256x256" href="assets/favicon-rs.png"><style>@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap');
 #portfolio-fiel *,#portfolio-fiel *::before,#portfolio-fiel *::after{ box-sizing: border-box; margin: 0; padding: 0; }
 #portfolio-fiel{
     --bg: #F7F3ED;
@@ -475,6 +475,9 @@ html { scroll-behavior:smooth; }
  }
 }
 
+/* Case-study source links follow the portfolio accent in both themes. */
+#portfolio-fiel .prob a { color:var(--accent); font-weight:600; text-underline-offset:3px; }
+
 #portfolio-fiel .foto{object-position:50% 8%}
 html,body{margin:0;background:#111319}
 #portfolio-duas-paginas [hidden]{display:none!important}</style></head><body><div id="portfolio-duas-paginas"><div data-page="portfolio"><div id="portfolio-fiel" tabindex="-1" lang="pt-BR" data-theme="dark"><a class="portfolio-skip" href="#portfolio-conteudo"><span class="lang-pt">Pular para o conteúdo</span><span class="lang-en" hidden>Skip to content</span></a>
@@ -658,6 +661,14 @@ html,body{margin:0;background:#111319}
 
       <div class="probs">
         <div class="probs-title"><span class="lang-pt">Problemas que resolvi</span><span class="lang-en" hidden>Problems I solved</span></div>
+<div class="prob" id="caso-banda-digitalocean">
+  <b><span class="lang-pt">Cobrança extra de banda: de US$ 113,43 a zero</span><span class="lang-en" hidden>Bandwidth overage: from US$ 113.43 to zero</span></b>
+  <p>
+    <span class="lang-pt">Investiguei uma cobrança de banda que crescia na DigitalOcean. Medi o tráfego dos servidores e identifiquei que, após a separação entre aplicação e banco, os workers consultavam o MySQL pelo endereço público. Os resultados das consultas passavam pela rede cobrada, mesmo entre servidores que podiam usar a rede privada. Corrigi as conexões para usar a VPC, conferindo a identidade do banco antes de cada troca. <strong>A cobrança extra caiu de US$ 113,43 em agosto para US$ 0 em setembro; outubro também estava zerado no período acompanhado.</strong> Depois criei um monitor em Python que verifica as faturas pela API e procura conexões MySQL pela rede pública, com alertas no Slack para detectar a volta do problema.</span>
+    <span class="lang-en" hidden>I investigated a growing DigitalOcean bandwidth charge. By measuring server traffic, I found that after the application and database were separated, workers were querying MySQL through its public address. Query results crossed the billed network even between servers that could use the private network. I moved those connections to the VPC, checking the database identity before each change. <strong>The overage dropped from US$ 113.43 in August to US$ 0 in September; October was also at zero during the observation period.</strong> I then built a Python monitor that checks invoices through the API and looks for MySQL connections over the public network, with Slack alerts to detect a recurrence.</span>
+    <a href="https://github.com/rsoldatellirosa/do-bandwidth-overage-fix" target="_blank" rel="noopener"><span class="lang-pt">Ver diagnóstico e código no GitHub ↗</span><span class="lang-en" hidden>See the diagnosis and code on GitHub ↗</span></a>
+  </p>
+</div>
 
         <div class="prob">
           <b><span class="lang-pt">Rastreadores "sem atualizar posição" — que não era a plataforma</span><span class="lang-en" hidden>Trackers "not updating position" — which wasn't the platform</span></b>
@@ -875,6 +886,12 @@ html,body{margin:0;background:#111319}
     </p>
 
     <div class="repos">
+<a class="repo-card" href="https://github.com/rsoldatellirosa/do-bandwidth-overage-fix" target="_blank" rel="noopener">
+  <b>do-bandwidth-overage-fix</b>
+  <span class="lang-pt">Diagnóstico de tráfego MySQL pela rede pública, correção para a VPC e monitor de rede e faturamento. Cobrança extra de banda reduzida de US$ 113,43 em agosto a zero em setembro.</span>
+  <span class="lang-en" hidden>Diagnosis of MySQL traffic over the public network, correction to the VPC, and network and billing monitoring. Bandwidth overage reduced from US$ 113.43 in August to zero in September.</span>
+  <em>Python · Linux · MySQL · DigitalOcean API · Slack</em>
+</a>
       <a class="repo-card" href="https://github.com/rsoldatellirosa/infra-monitors" target="_blank" rel="noopener">
         <b>infra-monitors</b>
         <span class="lang-pt">Três monitores com alerta no Slack: disco via Zabbix, disco via SSH e profundidade de filas do RabbitMQ. Threshold, delay, cooldown e aviso de recuperação.</span>

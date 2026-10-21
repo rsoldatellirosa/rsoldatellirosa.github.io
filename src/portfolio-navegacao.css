@@ -65,3 +65,6 @@ html { scroll-behavior:smooth; }
   scroll-behavior:auto!important; transition:none!important; animation:none!important;
  }
 }
+
+/* Case-study source links follow the portfolio accent in both themes. */
+#portfolio-fiel .prob a { color:var(--accent); font-weight:600; text-underline-offset:3px; }

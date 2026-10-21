@@ -102,7 +102,17 @@ def add_return_navigation(name, markup):
         result = result.replace('href="index.html"', 'href="#'+page_roots[name]+'"')
     return result
 
-views = {name:add_return_navigation(name,markup) for name,markup in {'index':landing,'portfolio':detail,'stack':stack}.items()}
+# New cases are additive; the original detail text is still verified below.
+bandwidth_case = (folder/'portfolio-bandwidth-case.html').read_text(encoding='utf-8').strip()
+bandwidth_project = (folder/'portfolio-bandwidth-project.html').read_text(encoding='utf-8').strip()
+case_anchor = '<div class="probs-title"><span class="lang-pt">Problemas que resolvi</span><span class="lang-en" hidden>Problems I solved</span></div>'
+assert detail.count(case_anchor) == 2
+detail_with_cases = detail.replace(case_anchor, case_anchor+'\n'+bandwidth_case, 1)
+assert detail_with_cases.count('<div class="repos">') == 1
+detail_with_cases = detail_with_cases.replace('<div class="repos">', '<div class="repos">\n'+bandwidth_project, 1)
+assert detail_with_cases.replace('\n'+bandwidth_case, '', 1).replace('\n'+bandwidth_project, '', 1) == detail
+views = {name:add_return_navigation(name,markup) for name,markup in {'index':landing,'portfolio':detail_with_cases,'stack':stack}.items()}
+sharing_heads = json.loads((folder/'page-sharing-heads.json').read_text(encoding='utf-8'))
 styles = {'index':landing_css,'portfolio':detail_css,'stack':stack_css}
 styles = {name:css.replace('.skillgroup h4', '.skillgroup :is(h3,h4)')+'\n'+navigation_css for name,css in styles.items()}
 
@@ -144,7 +154,7 @@ for name,markup in views.items():
         markup = re.sub(r'<img class="(?:foto|entrada-photo)"[^>]*>', standalone_portrait, markup)
         if name == 'portfolio':
             page_css += '\n#portfolio-fiel .foto{object-position:50% 8%}'
-    page = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rodrigo Soldatelli da Rosa'+(' | Portfólio completo' if name=='portfolio' else ' | Stack' if name=='stack' else ' | Infraestrutura &amp; DevOps')+'</title>'+favicon+'<style>'+page_css+'\nhtml,body{margin:0;background:#111319}\n#portfolio-duas-paginas [hidden]{display:none!important}</style></head><body><div id="portfolio-duas-paginas">'+wrap_view(name,markup)+'</div><script>'+script+'</script></body></html>'
+    page = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rodrigo Soldatelli da Rosa'+(' | Portfólio completo' if name=='portfolio' else ' | Stack' if name=='stack' else ' | Infraestrutura &amp; DevOps')+'</title>'+sharing_heads[name]+favicon+'<style>'+page_css+'\nhtml,body{margin:0;background:#111319}\n#portfolio-duas-paginas [hidden]{display:none!important}</style></head><body><div id="portfolio-duas-paginas">'+wrap_view(name,markup)+'</div><script>'+script+'</script></body></html>'
     assert page.count(favicon) == 1, 'RS favicon must be included once'
     (output_folder/(name+'.html')).write_text(page,encoding='utf-8')
 
@@ -191,7 +201,7 @@ assert inspect(headline).text == inspect(re.search(r'<div class="headline">(.*?)
 inspection=inspect(inline)
 assert len(inspection.ids)==len(set(inspection.ids)), 'Duplicate IDs'
 page_ids={name:set(inspect(markup).ids) for name,markup in views.items()}
-for name, source in {'index':landing,'portfolio':detail,'stack':stack}.items():
+for name, source in {'index':landing,'portfolio':detail_with_cases,'stack':stack}.items():
     augmented = re.sub(r'<nav class="portfolio-return".*?</nav>', '', views[name], flags=re.S)
     augmented = re.sub(r'<a class="portfolio-skip".*?</a>', '', augmented, flags=re.S)
     assert inspect(augmented).text == inspect(source).text, 'Navigation must not rewrite existing content'

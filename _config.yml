@@ -7,3 +7,7 @@ exclude:
   - package-lock.json
   - README.md
   - BACKUP.md
+  - tests
+  - LINKEDIN.md
+  - linkedin-drafts
+  - linkedin-plan.json

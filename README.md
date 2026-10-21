@@ -63,3 +63,13 @@ Para apontar um domínio comprado para cá:
    - 1 registro `CNAME` para `www`, apontando para `rsoldatellirosa.github.io`
 3. Em Settings > Pages, preencher o campo *Custom domain* e aguardar a
    verificação; depois marcar *Enforce HTTPS* (o certificado leva alguns minutos).
+
+
+## Casos novos e rascunhos para LinkedIn
+
+Cadastre os próximos casos em `src/portfolio-cases.json`. Esse catálogo alimenta
+os blocos adicionais da experiência na Hapolo e a lista de projetos. Depois de
+uma publicação bem-sucedida, a automação prepara rascunhos para os casos ainda
+não processados. Layout e favicon não geram posts. Nenhum texto é publicado no
+LinkedIn automaticamente. Veja [LINKEDIN.md](LINKEDIN.md) para adicionar casos,
+baixar os rascunhos, gerar novamente ou ativar a reescrita opcional com IA.

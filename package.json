@@ -7,7 +7,8 @@
     "build": "python tools/build-portfolio-duplo.py",
     "test": "node tools/verify-portfolio-interacoes.cjs",
     "icons": "node tools/build-portfolio-icons.cjs",
-    "dev": "python -m http.server 8765 --bind 127.0.0.1"
+    "dev": "python -m http.server 8765 --bind 127.0.0.1",
+    "test:linkedin": "python -m unittest discover -s tests -p test_linkedin_drafts.py -v"
   },
   "devDependencies": {
     "lucide": "1.8.0",

@@ -5,3 +5,6 @@ __pycache__/
 *.pyc
 *.log
 backups/
+
+linkedin-drafts/
+linkedin-plan.json

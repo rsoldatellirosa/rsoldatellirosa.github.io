@@ -1,0 +1,76 @@
+name: Rascunhos LinkedIn
+
+on:
+  workflow_run:
+    workflows: [pages-build-deployment]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      case_id:
+        description: ID do caso (vazio para todos os casos ainda sem rascunho)
+        type: string
+        required: false
+      force:
+        description: Gerar novamente um caso que já tem rascunho
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-linkedin-drafts
+  cancel-in-progress: false
+
+jobs:
+  draft:
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      SOURCE_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          ref: ${{ env.SOURCE_SHA }}
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Verificar catálogo e regras de geração
+        run: python -m unittest discover -s tests -p 'test_linkedin_drafts.py' -v
+      - name: Preparar rascunhos sem publicar
+        id: drafts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PORTFOLIO_POST_MODEL: ${{ vars.PORTFOLIO_POST_MODEL }}
+          CASE_ID: ${{ inputs.case_id }}
+          FORCE: ${{ inputs.force }}
+        shell: bash
+        run: |
+          args=(--github-state --case-id "$CASE_ID")
+          if [[ "$FORCE" == "true" ]]; then args+=(--force); fi
+          python tools/generate_linkedin_drafts.py "${args[@]}"
+      - name: Guardar arquivos para revisão
+        if: steps.drafts.outputs.has_drafts == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: rascunhos-linkedin
+          path: linkedin-drafts/
+          retention-days: 90
+          if-no-files-found: error
+      - name: Registrar casos gerados depois de guardar o rascunho
+        if: steps.drafts.outputs.has_drafts == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DRAFT_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python tools/generate_linkedin_drafts.py --github-state --mark-generated

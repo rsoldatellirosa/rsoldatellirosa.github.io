@@ -1,10 +1,10 @@
 {
   "caso-banda-digitalocean": {
     "mode": "texto aprovado, sem IA",
-    "warning": "",
+    "warning": "A IA não concluiu um rascunho válido; foi usado o texto aprovado.",
     "source": "https://rsoldatellirosa.github.io/portfolio.html#caso-banda-digitalocean",
     "source_sha256": "24d585043ad400fc149a5a741d100aaddf9321ba4e670818f0a44f9fdd32b2eb",
-    "run_url": "https://github.com/rsoldatellirosa/rsoldatellirosa.github.io/actions/runs/39653139429",
-    "generated_at": "2026-10-21T18:29:20.670503+00:00"
+    "run_url": "https://github.com/rsoldatellirosa/rsoldatellirosa.github.io/actions/runs/39654856409",
+    "generated_at": "2026-10-21T18:40:47.807125+00:00"
   }
 }

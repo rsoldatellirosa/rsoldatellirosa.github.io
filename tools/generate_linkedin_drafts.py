@@ -192,10 +192,38 @@ def write_drafts(root, cases, out, api_key=''):
     return records
 
 
+def render_summary(records, out, previous):
+    summary = '## Rascunhos LinkedIn\n\n'
+    if not records:
+        summary += 'Nenhum caso novo. Os rascunhos anteriores continuam disponíveis:\n\n'
+        urls = set()
+        for ident, info in sorted(previous.items()):
+            url = info.get('run_url', '')
+            if (re.fullmatch(r'[a-z][a-z0-9-]{2,79}', ident) and
+                    re.fullmatch(r'https://github\.com/rsoldatellirosa/rsoldatellirosa\.github\.io/actions/runs/\d+', url)
+                    and url not in urls):
+                summary += f'- [Abrir rascunho: {ident}]({url})\n'
+                urls.add(url)
+        return summary
+    summary += 'Revise e copie o texto abaixo. Nenhum post foi enviado ao LinkedIn.\n\n'
+    for ident, info in records.items():
+        post = (out / (ident + '.txt')).read_text(encoding='utf-8').strip()
+        # Keep all draft content inside a code block, including embedded Markdown.
+        longest = max((len(match[0]) for match in re.finditer(r'`+', post)), default=0)
+        fence = '`' * max(3, longest + 1)
+        summary += f'### {ident}\n\nModo: {info["mode"]}.\n\n'
+        if info['warning']:
+            summary += info['warning'] + '\n\n'
+        summary += fence + 'text\n' + post + '\n' + fence + '\n\n'
+    summary += 'O download em **Artifacts → rascunhos-linkedin** é opcional.\n'
+    return summary
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--case-id', default='')
     parser.add_argument('--force', action='store_true')
+    parser.add_argument('--no-ai', action='store_true')
     parser.add_argument('--github-state', action='store_true')
     parser.add_argument('--mark-generated', action='store_true')
     parser.add_argument('--out', type=Path, default=ROOT / 'linkedin-drafts')
@@ -211,18 +239,17 @@ def main():
             info.update({'run_url': run_url, 'generated_at': datetime.now(timezone.utc).isoformat()})
         state.save(records, os.environ['SOURCE_SHA'])
         return
-    cases = pending_cases(load_cases(ROOT), state.read() if state else {}, args.case_id, args.force)
-    records = write_drafts(ROOT, cases, args.out, os.environ.get('OPENAI_API_KEY', ''))
+    previous = state.read() if state else {}
+    cases = pending_cases(load_cases(ROOT), previous, args.case_id, args.force)
+    api_key = '' if args.no_ai else os.environ.get('OPENAI_API_KEY', '')
+    records = write_drafts(ROOT, cases, args.out, api_key)
     args.plan.write_text(json.dumps(records, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     if output := os.environ.get('GITHUB_OUTPUT'):
         with open(output, 'a', encoding='utf-8') as file:
             file.write('has_drafts=' + str(bool(records)).lower() + '\n')
     if summary := os.environ.get('GITHUB_STEP_SUMMARY'):
         with open(summary, 'a', encoding='utf-8') as file:
-            file.write('## Rascunhos LinkedIn\n\n' + (f'{len(records)} caso(s) preparado(s). Baixe o artefato `rascunhos-linkedin` nesta execução.\n'
-                       if records else 'Nenhum caso novo. Os casos registrados já têm rascunho.\n'))
-            if not os.environ.get('OPENAI_API_KEY'):
-                file.write('\nModo sem IA: texto aprovado do portfólio. Chave de API opcional.\n')
+            file.write(render_summary(records, args.out, previous))
     print(f'{len(records)} rascunho(s) preparado(s); nenhum envio ao LinkedIn.')
 
 

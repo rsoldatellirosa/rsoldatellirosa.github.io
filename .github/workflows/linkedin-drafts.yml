@@ -15,6 +15,10 @@ on:
         description: Gerar novamente um caso que já tem rascunho
         type: boolean
         default: false
+      use_ai:
+        description: Usar IA quando a chave e a conta da API estiverem disponíveis
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -55,10 +59,12 @@ jobs:
           PORTFOLIO_POST_MODEL: ${{ vars.PORTFOLIO_POST_MODEL }}
           CASE_ID: ${{ inputs.case_id }}
           FORCE: ${{ inputs.force }}
+          USE_AI: ${{ inputs.use_ai }}
         shell: bash
         run: |
           args=(--github-state --case-id "$CASE_ID")
           if [[ "$FORCE" == "true" ]]; then args+=(--force); fi
+          if [[ "$USE_AI" == "false" ]]; then args+=(--no-ai); fi
           python tools/generate_linkedin_drafts.py "${args[@]}"
       - name: Guardar arquivos para revisão
         if: steps.drafts.outputs.has_drafts == 'true'

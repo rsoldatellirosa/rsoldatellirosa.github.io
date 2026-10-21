@@ -139,6 +139,36 @@ class StateTests(unittest.TestCase):
             self.assertEqual(api.call_count, 2)
 
 
+class SummaryTests(unittest.TestCase):
+    def test_full_draft_can_be_read_without_downloading_artifacts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            out = Path(directory)
+            records = drafts.write_drafts(ROOT, [load_cases(ROOT)[0]], out)
+            post = (out / 'caso-banda-digitalocean.txt').read_text(encoding='utf-8').strip()
+            summary = drafts.render_summary(records, out, {})
+            self.assertIn(post, summary)
+            self.assertIn('download', summary)
+            self.assertIn('opcional', summary)
+
+    def test_draft_markdown_cannot_escape_its_code_block(self):
+        with tempfile.TemporaryDirectory() as directory:
+            out = Path(directory)
+            post = 'Texto aprovado\n```\n# Título dentro do rascunho\n```'
+            (out / 'caso-teste.txt').write_text(post, encoding='utf-8')
+            summary = drafts.render_summary({'caso-teste': {'mode': 'teste', 'warning': ''}}, out, {})
+            self.assertIn('````text\n' + post + '\n````', summary)
+
+    def test_unchanged_run_links_to_the_previous_draft(self):
+        url = 'https://github.com/rsoldatellirosa/rsoldatellirosa.github.io/actions/runs/123'
+        summary = drafts.render_summary({}, Path('.'), {'caso-teste': {'run_url': url}})
+        self.assertIn('Nenhum caso novo', summary)
+        self.assertIn(url, summary)
+
+    def test_untrusted_history_links_are_not_rendered(self):
+        summary = drafts.render_summary({}, Path('.'), {'caso-teste': {'run_url': 'javascript:alert(1)'}})
+        self.assertNotIn('javascript:', summary)
+
+
 class DiagnosticTests(unittest.TestCase):
     def test_only_status_and_allowlisted_api_code_are_exposed(self):
         body = io.BytesIO(json.dumps({'error': {'code': 'insufficient_quota',

@@ -11,8 +11,11 @@ LinkedIn. Revise e publique o texto manualmente no seu perfil.
 
 1. Abra https://github.com/rsoldatellirosa/rsoldatellirosa.github.io/actions/workflows/linkedin-drafts.yml.
 2. Abra a execução concluída mais recente que informa ter preparado rascunhos.
-3. Em **Artifacts**, baixe **rascunhos-linkedin**.
-4. Abra o `.txt` do caso, revise o conteúdo e copie para o LinkedIn.
+3. O texto completo aparece no **resumo da execução**, em um bloco para copiar.
+4. Revise, copie o texto e cole no LinkedIn. Não é necessário baixar arquivos.
+
+O download em **Artifacts > rascunhos-linkedin** continua disponível como opção.
+Execuções sem casos novos exibem links para os rascunhos anteriores.
 
 Os arquivos ficam guardados como artefatos por 90 dias, conforme os limites do
 repositório. Eles não entram no site. Como o repositório é público, não considere
@@ -43,7 +46,8 @@ rascunho. O ID é a identidade do caso; não troque o ID para corrigir sua reda�
 Em **Actions > Rascunhos LinkedIn > Run workflow**, mantenha a branch `main`,
 informe o `case_id` e marque **Gerar novamente**. Deixe o ID vazio para selecionar
 todos os casos ainda não processados. Se marcar gerar novamente com ID vazio,
-todos os casos serão refeitos.
+todos os casos serão refeitos. A opção **Usar IA** fica ligada por padrão; pode
+ser desligada em uma execução manual para usar somente o texto aprovado, sem chamar a API.
 
 ## Modo sem chave de IA (já funciona)
 

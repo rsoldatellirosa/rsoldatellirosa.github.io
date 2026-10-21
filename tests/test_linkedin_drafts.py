@@ -1,6 +1,7 @@
 """Offline tests for draft generation, validation and durable deduplication."""
 import base64
 import json
+import io
 from pathlib import Path
 import sys
 import tempfile
@@ -136,6 +137,22 @@ class StateTests(unittest.TestCase):
             with self.assertRaises(HTTPError):
                 state.save({'new-case': {}}, 'a' * 40)
             self.assertEqual(api.call_count, 2)
+
+
+class DiagnosticTests(unittest.TestCase):
+    def test_only_status_and_allowlisted_api_code_are_exposed(self):
+        body = io.BytesIO(json.dumps({'error': {'code': 'insufficient_quota',
+                          'message': 'SENSITIVE_RESPONSE_MUST_NOT_APPEAR'}}).encode())
+        error = HTTPError('https://api.openai.com', 429, '', {}, body)
+        self.assertEqual(drafts.safe_error_reason(error), 'HTTP 429 / insufficient_quota')
+
+    def test_arbitrary_exception_text_is_not_exposed(self):
+        self.assertEqual(drafts.safe_error_reason(ValueError('SENSITIVE_RESPONSE_MUST_NOT_APPEAR')), 'ValueError')
+
+    def test_unknown_api_code_is_not_exposed(self):
+        error = HTTPError('https://api.openai.com', 400, '', {},
+                          io.BytesIO(b'{"error":{"code":"SENSITIVE_RESPONSE_MUST_NOT_APPEAR"}}'))
+        self.assertEqual(drafts.safe_error_reason(error), 'HTTP 400')
 
 
 if __name__ == '__main__':

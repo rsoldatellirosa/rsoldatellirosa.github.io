@@ -117,6 +117,28 @@ def rewrite_with_ai(source, readme, title, api_key):
     return validate_post(json.loads(content)['post'], source)
 
 
+def safe_error_reason(error):
+    """Only expose allowlisted codes or our own validation messages, never API bodies."""
+    if isinstance(error, HTTPError):
+        code = ''
+        try:
+            code = json.loads(error.read(8192)).get('error', {}).get('code', '')
+        except Exception:
+            pass
+        allowed = {'insufficient_quota', 'invalid_api_key', 'model_not_found',
+                   'rate_limit_exceeded', 'insufficient_permissions', 'billing_hard_limit_reached'}
+        suffix = ' / ' + code if isinstance(code, str) and code in allowed else ''
+        return f'HTTP {error.code}' + suffix
+    allowed_messages = {
+        'Model response was incomplete', 'Draft length outside allowed range',
+        'Draft must not contain em dashes or model-generated links',
+        'Draft introduced undocumented numbers', 'Draft contains a possible credential or IP address',
+    }
+    if type(error) is ValueError and str(error) in allowed_messages:
+        return str(error)
+    return type(error).__name__
+
+
 def draft_case(root, case, api_key='', fetch=request_json):
     source = case_text(root, case)
     mode, warning = 'texto aprovado, sem IA', ''
@@ -127,9 +149,9 @@ def draft_case(root, case, api_key='', fetch=request_json):
             readme = base64.b64decode(readme_data['content']).decode('utf-8')[:20000]
             text = rewrite_with_ai(source, readme, case['title'], api_key)
             mode = 'reescrito com IA, aguardando revisão'
-        except Exception:
+        except Exception as error:
             # Do not log external responses, credentials or untrusted repository text.
-            warning = 'A IA não concluiu um rascunho válido; foi usado o texto aprovado.'
+            warning = 'A IA não concluiu um rascunho válido (' + safe_error_reason(error) + '); foi usado o texto aprovado.'
     text = validate_post(text, source)
     url = SITE + 'portfolio.html#' + case['id']
     post = (text + '\n\nIncluí esse caso no meu portfólio e deixei o projeto documentado no GitHub.'

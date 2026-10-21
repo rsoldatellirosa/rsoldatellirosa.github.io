@@ -10,6 +10,7 @@ from pathlib import Path
 import re
 import sys
 from urllib.error import HTTPError
+from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
 from portfolio_cases import load_cases, case_text
@@ -121,14 +122,25 @@ def safe_error_reason(error):
     """Only expose allowlisted codes or our own validation messages, never API bodies."""
     if isinstance(error, HTTPError):
         code = ''
+        detail = {}
         try:
-            code = json.loads(error.read(8192)).get('error', {}).get('code', '')
+            detail = json.loads(error.read(8192)).get('error', {})
+            code = detail.get('code') or detail.get('type') or ''
         except Exception:
             pass
         allowed = {'insufficient_quota', 'invalid_api_key', 'model_not_found',
                    'rate_limit_exceeded', 'insufficient_permissions', 'billing_hard_limit_reached'}
         suffix = ' / ' + code if isinstance(code, str) and code in allowed else ''
-        return f'HTTP {error.code}' + suffix
+        # Classify known quota messages without ever exposing the returned text.
+        if error.code == 429 and not suffix and isinstance(detail, dict):
+            message = str(detail.get('message', '')).lower()
+            if any(word in message for word in ('quota', 'billing', 'credit', 'balance')):
+                suffix = ' / quota_or_billing'
+            elif 'rate limit' in message:
+                suffix = ' / rate_limit_exceeded'
+        host = urlsplit(error.url).hostname
+        origin = {'api.openai.com': 'OpenAI', 'api.github.com': 'GitHub'}.get(host, 'serviço externo')
+        return origin + f' HTTP {error.code}' + suffix
     allowed_messages = {
         'Model response was incomplete', 'Draft length outside allowed range',
         'Draft must not contain em dashes or model-generated links',
@@ -145,7 +157,8 @@ def draft_case(root, case, api_key='', fetch=request_json):
     text = source.replace('. ', '.\n\n')
     if api_key:
         try:
-            readme_data = fetch('https://api.github.com/repos/' + case['repository'] + '/readme')
+            readme_data = fetch('https://api.github.com/repos/' + case['repository'] + '/readme',
+                                token=os.environ.get('GH_TOKEN'))
             readme = base64.b64decode(readme_data['content']).decode('utf-8')[:20000]
             text = rewrite_with_ai(source, readme, case['title'], api_key)
             mode = 'reescrito com IA, aguardando revisão'

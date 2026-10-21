@@ -144,7 +144,7 @@ class DiagnosticTests(unittest.TestCase):
         body = io.BytesIO(json.dumps({'error': {'code': 'insufficient_quota',
                           'message': 'SENSITIVE_RESPONSE_MUST_NOT_APPEAR'}}).encode())
         error = HTTPError('https://api.openai.com', 429, '', {}, body)
-        self.assertEqual(drafts.safe_error_reason(error), 'HTTP 429 / insufficient_quota')
+        self.assertEqual(drafts.safe_error_reason(error), 'OpenAI HTTP 429 / insufficient_quota')
 
     def test_arbitrary_exception_text_is_not_exposed(self):
         self.assertEqual(drafts.safe_error_reason(ValueError('SENSITIVE_RESPONSE_MUST_NOT_APPEAR')), 'ValueError')
@@ -152,7 +152,12 @@ class DiagnosticTests(unittest.TestCase):
     def test_unknown_api_code_is_not_exposed(self):
         error = HTTPError('https://api.openai.com', 400, '', {},
                           io.BytesIO(b'{"error":{"code":"SENSITIVE_RESPONSE_MUST_NOT_APPEAR"}}'))
-        self.assertEqual(drafts.safe_error_reason(error), 'HTTP 400')
+        self.assertEqual(drafts.safe_error_reason(error), 'OpenAI HTTP 400')
+
+    def test_quota_message_is_classified_without_returning_its_contents(self):
+        error = HTTPError('https://api.openai.com', 429, '', {},
+                          io.BytesIO(b'{"error":{"message":"quota exceeded SENSITIVE_RESPONSE_MUST_NOT_APPEAR"}}'))
+        self.assertEqual(drafts.safe_error_reason(error), 'OpenAI HTTP 429 / quota_or_billing')
 
 
 if __name__ == '__main__':

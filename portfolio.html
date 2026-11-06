@@ -487,6 +487,12 @@ html { scroll-behavior:smooth; }
   text-underline-offset: .2em;
 }
 
+/* Stack accessibility: retain the existing layout with semantic category headings. */
+#portfolio-stack .topbar .wrap { height:auto; }
+#portfolio-stack h2.label { margin:0; font-family:inherit; letter-spacing:normal; }
+#portfolio-stack[data-theme="dark"] .tool.featured,
+#portfolio-stack[data-theme="dark"] .tool.featured .mark.mono.own { color:#171b24; }
+
 #portfolio-fiel .foto{object-position:50% 8%}
 html,body{margin:0;background:#111319}
 #portfolio-duas-paginas [hidden]{display:none!important}</style></head><body><div id="portfolio-duas-paginas"><div data-page="portfolio"><div id="portfolio-fiel" tabindex="-1" lang="pt-BR" data-theme="dark"><a class="portfolio-skip" href="#portfolio-conteudo"><span class="lang-pt">Pular para o conteúdo</span><span class="lang-en" hidden>Skip to content</span></a>

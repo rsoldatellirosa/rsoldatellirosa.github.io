@@ -235,3 +235,16 @@ load(path.join(__dirname, previewName, 'portfolio.html'), new Map(), undefined, 
 });
 assert.equal(incoming.length, preservedIncoming, 'The full portfolio must not redirect to itself');
 console.log('PASS: old homepage section links preserve their destination and referral parameters; no redirect loop.');
+
+
+const accessibleStack = parse(fs.readFileSync(path.join(__dirname, '../stack.html'), 'utf8'));
+const stackRows = accessibleStack.querySelectorAll('.row');
+assert(stackRows.length > 0);
+assert.equal(accessibleStack.querySelectorAll('h2.label').length, stackRows.length,
+  'Every stack category must be available to heading navigation');
+for (const row of stackRows) assert.equal(row.querySelector('.label').tagName, 'H2');
+for (const mark of accessibleStack.querySelectorAll('.mark')) {
+  assert.equal(mark.getAttribute('aria-hidden'), 'true', 'Adjacent tool names describe decorative marks');
+  if (mark.tagName === 'SVG') assert.equal(mark.getAttribute('focusable'), 'false');
+}
+console.log('PASS: semantic stack categories and decorative marks without duplicate accessible names.');

@@ -17,6 +17,8 @@
 #portfolio-entrada :is(h1,h2,p) { margin:0; }
 #portfolio-entrada a { color:inherit; text-decoration:none; }
 #portfolio-entrada :is(a,button):focus-visible { outline:3px solid var(--entrada-gold); outline-offset:5px; }
+/* The header and portrait scene stay dark in both themes. */
+#portfolio-entrada :is(.entrada-nav,.entrada-hero) :is(a,button):focus-visible { outline-color:#f5c52c; }
 #portfolio-entrada .entrada-shell { width:100%; margin:0; }
 #portfolio-entrada .entrada-nav {
  position:relative; z-index:3; padding:26px 108px 22px 7.5%;

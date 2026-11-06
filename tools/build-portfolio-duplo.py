@@ -35,6 +35,19 @@ stack_css, stack = document_parts(stack_baseline)
 stack_css = stack_css.replace('#portfolio-fiel', '#portfolio-stack')
 stack = stack.replace('id="portfolio-fiel"', 'id="portfolio-stack"').replace('id="langbtn"', 'id="stack-langbtn"').replace('id="themebtn"', 'id="stack-themebtn"')
 stack = stack.replace('href="index.html', 'href="portfolio.html')
+# Category labels are headings; adjacent tool names already describe each mark.
+stack, category_count = re.subn(r'<div class="label">(.*?)</div>', r'<h2 class="label">\1</h2>', stack, flags=re.S)
+assert category_count > 0, 'Expected stack categories'
+
+def decorative_stack_mark(match):
+    opening = match[0]
+    if 'aria-hidden=' not in opening:
+        opening = opening[:-1] + ' aria-hidden="true">'
+    if opening.startswith('<svg') and 'focusable=' not in opening:
+        opening = opening[:-1] + ' focusable="false">'
+    return opening
+
+stack = re.sub(r'<(?:svg|span)\b[^>]*\bclass="mark(?: [^"]*)?"[^>]*>', decorative_stack_mark, stack)
 
 # Add navigation and stable deep links without removing or rewriting original copy.
 home_link = '<a href="index.html" class="duplo-home"><span class="lang-pt">← Início</span><span class="lang-en" hidden>← Home</span></a>'

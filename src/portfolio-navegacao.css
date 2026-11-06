@@ -77,3 +77,9 @@ html { scroll-behavior:smooth; }
   font-weight: 600;
   text-underline-offset: .2em;
 }
+
+/* Stack accessibility: retain the existing layout with semantic category headings. */
+#portfolio-stack .topbar .wrap { height:auto; }
+#portfolio-stack h2.label { margin:0; font-family:inherit; letter-spacing:normal; }
+#portfolio-stack[data-theme="dark"] .tool.featured,
+#portfolio-stack[data-theme="dark"] .tool.featured .mark.mono.own { color:#171b24; }

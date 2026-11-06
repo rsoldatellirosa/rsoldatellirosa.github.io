@@ -6,5 +6,29 @@
     "source_sha256": "24d585043ad400fc149a5a741d100aaddf9321ba4e670818f0a44f9fdd32b2eb",
     "run_url": "https://github.com/rsoldatellirosa/rsoldatellirosa.github.io/actions/runs/39656841003",
     "generated_at": "2026-10-21T18:54:04.249636+00:00"
+  },
+  "caso-estudio-apps-mutirao": {
+    "mode": "texto aprovado, sem IA",
+    "warning": "",
+    "source": "https://rsoldatellirosa.github.io/portfolio.html#caso-estudio-apps-mutirao",
+    "source_sha256": "8242bcaf0bb6053ef1e05172a1a6fddd6257280682769e4eabd9c92a957fdb78",
+    "run_url": "https://github.com/rsoldatellirosa/rsoldatellirosa.github.io/actions/runs/42266662992",
+    "generated_at": "2026-11-06T17:59:55.603022+00:00"
+  },
+  "caso-desempenho-aulia": {
+    "mode": "texto aprovado, sem IA",
+    "warning": "",
+    "source": "https://rsoldatellirosa.github.io/portfolio.html#caso-desempenho-aulia",
+    "source_sha256": "380753d8f62bd87f1276b52214a8a04a584b0760fa14a6f534aff0929e879e16",
+    "run_url": "https://github.com/rsoldatellirosa/rsoldatellirosa.github.io/actions/runs/42266662992",
+    "generated_at": "2026-11-06T17:59:55.603039+00:00"
+  },
+  "caso-relatorios-percurso": {
+    "mode": "texto aprovado, sem IA",
+    "warning": "",
+    "source": "https://rsoldatellirosa.github.io/portfolio.html#caso-relatorios-percurso",
+    "source_sha256": "cecac32817e743a1505bcf324aa6afb4a3f3e49ea408df08b17338f260ac4e57",
+    "run_url": "https://github.com/rsoldatellirosa/rsoldatellirosa.github.io/actions/runs/42266662992",
+    "generated_at": "2026-11-06T17:59:55.603042+00:00"
   }
 }

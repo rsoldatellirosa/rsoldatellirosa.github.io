@@ -416,7 +416,7 @@ html { scroll-behavior:smooth; }
  --nav-border:var(--entrada-rule,var(--border));
 }
 #portfolio-duas-paginas :is(.entrada-nav,.topbar) { position:sticky; top:0; z-index:50; }
-#portfolio-duas-paginas :is(main[id],section[id],article[id],a[id],footer[id]) { scroll-margin-top:110px; }
+#portfolio-duas-paginas :is(main[id],section[id],article[id],a[id],footer[id],.prob[id]) { scroll-margin-top:110px; }
 #portfolio-duas-paginas .portfolio-skip {
  position:fixed; top:12px; left:16px; z-index:100; transform:translateY(calc(-100% - 20px));
  padding:12px 18px; border:2px solid var(--nav-accent); border-radius:4px;
@@ -464,7 +464,7 @@ html { scroll-behavior:smooth; }
  #portfolio-duas-paginas .entrada-action>span[aria-hidden] { transition:transform 120ms ease-out; }
 }
 @media (max-width:650px) {
- #portfolio-duas-paginas :is(main[id],section[id],article[id],a[id],footer[id]) { scroll-margin-top:160px; }
+ #portfolio-duas-paginas :is(main[id],section[id],article[id],a[id],footer[id],.prob[id]) { scroll-margin-top:160px; }
  #portfolio-duas-paginas .portfolio-return { padding:20px 6%; }
 }
 @media (prefers-reduced-motion:reduce) {

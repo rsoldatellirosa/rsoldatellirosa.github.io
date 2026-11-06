@@ -68,8 +68,13 @@ Para apontar um domínio comprado para cá:
 ## Casos novos e rascunhos para LinkedIn
 
 Cadastre os próximos casos em `src/portfolio-cases.json`. Esse catálogo alimenta
-os blocos adicionais da experiência na Hapolo e a lista de projetos. Depois de
+os blocos adicionais de Hapolo, ensino e Aulia, e os cartões opcionais de projetos. Depois de
 uma publicação bem-sucedida, a automação prepara rascunhos para os casos ainda
 não processados. Layout e favicon não geram posts. Nenhum texto é publicado no
 LinkedIn automaticamente. Veja [LINKEDIN.md](LINKEDIN.md) para adicionar casos,
-baixar os rascunhos, gerar novamente ou ativar a reescrita opcional com IA.
+ler os rascunhos sem download, gerar novamente ou ativar a reescrita opcional com IA.
+
+Projetos escolares usam o hub público das turmas, sem nomes ou fotos de alunos
+nem links para trabalhos fora da listagem. Relatos operacionais não incluem
+relatórios reais ou dados de clientes. Os casos novos de novembro geram rascunhos
+somente do texto revisado, sem buscar contexto externo nem chamar IA.

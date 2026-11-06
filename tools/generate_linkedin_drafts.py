@@ -13,7 +13,7 @@ from urllib.error import HTTPError
 from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
-from portfolio_cases import load_cases, case_text
+from portfolio_cases import load_cases, case_text, project_url
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_BRANCH = 'codex/linkedin-state'
@@ -155,11 +155,13 @@ def draft_case(root, case, api_key='', fetch=request_json):
     source = case_text(root, case)
     mode, warning = 'texto aprovado, sem IA', ''
     text = source.replace('. ', '.\n\n')
-    if api_key:
+    if api_key and case.get('ai_rewrite', True):
         try:
-            readme_data = fetch('https://api.github.com/repos/' + case['repository'] + '/readme',
-                                token=os.environ.get('GH_TOKEN'))
-            readme = base64.b64decode(readme_data['content']).decode('utf-8')[:20000]
+            readme = ''
+            if case.get('repository'):
+                readme_data = fetch('https://api.github.com/repos/' + case['repository'] + '/readme',
+                                    token=os.environ.get('GH_TOKEN'))
+                readme = base64.b64decode(readme_data['content']).decode('utf-8')[:20000]
             text = rewrite_with_ai(source, readme, case['title'], api_key)
             mode = 'reescrito com IA, aguardando revisão'
         except Exception as error:
@@ -167,8 +169,9 @@ def draft_case(root, case, api_key='', fetch=request_json):
             warning = 'A IA não concluiu um rascunho válido (' + safe_error_reason(error) + '); foi usado o texto aprovado.'
     text = validate_post(text, source)
     url = SITE + 'portfolio.html#' + case['id']
-    post = (text + '\n\nIncluí esse caso no meu portfólio e deixei o projeto documentado no GitHub.'
-            '\n\nPortfólio: ' + url + '\nProjeto: https://github.com/' + case['repository'])
+    post = text + '\n\nIncluí esse caso no meu portfólio.\n\nPortfólio: ' + url
+    if link := project_url(case):
+        post += '\nProjeto: ' + link
     if len(post) > 2800:
         raise ValueError('Final draft is too long')
     return post, {'mode': mode, 'warning': warning, 'source': url,

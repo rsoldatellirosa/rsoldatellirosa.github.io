@@ -477,6 +477,15 @@ html { scroll-behavior:smooth; }
 
 /* Case-study source links follow the portfolio accent in both themes. */
 #portfolio-fiel .prob a { color:var(--accent); font-weight:600; text-underline-offset:3px; }
+#portfolio-fiel .prob > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  text-underline-offset: .2em;
+}
 
 #portfolio-fiel .foto{object-position:50% 8%}
 html,body{margin:0;background:#111319}
@@ -599,7 +608,16 @@ html,body{margin:0;background:#111319}
       </p>
       <em>Next.js · TypeScript · Supabase · Claude API · Mercado Pago</em>
       <span class="af-go"><span class="lang-pt">Abrir aulia.app.br</span><span class="lang-en" hidden>Open aulia.app.br</span> <span aria-hidden="true">↗</span></span>
-    </a></div>
+    </a>
+<div class="probs" data-portfolio-updates="aulia"><h3 class="probs-title"><span class="lang-pt">Aulia na prática</span><span class="lang-en" hidden>Aulia in practice</span></h3>
+<div class="prob" id="caso-desempenho-aulia">
+  <b><span class="lang-pt">Aulia: investigar a lentidão antes de aumentar a infraestrutura</span><span class="lang-en" hidden>Aulia: investigating slow pages before adding infrastructure</span></b>
+  <p>
+    <span class="lang-pt">Ao usar o Aulia e acompanhar os testes, percebi demora para abrir aulas e trocar de tela. Cruzei tempos de resposta com logs e encontrei funções e banco em regiões diferentes, consultas de sessão repetidas e carregamentos antecipados de aulas e PDFs que o professor ainda não tinha aberto. Aproximei as funções do banco, passei a conferir a assinatura da sessão nas telas de leitura e retirei esses carregamentos por item. As ações de escrita mantiveram a validação no servidor. <strong>Nas medições de outubro de 2026, a primeira carga caiu de cerca de 7 para 1,8 segundo, e a semana com a instância aquecida passou de aproximadamente 900 para 300 milissegundos.</strong> São resultados observados nesses testes, sujeitos à rede e ao estado da instância. Também implementei recuperação de rascunhos no aparelho e ampliei a base para 56 testes unitários em datas, agenda, planos, BNCC e outras regras do produto.</span>
+    <span class="lang-en" hidden>While using Aulia and following user tests, I noticed delays when opening lessons and moving between screens. I compared response times with logs and found functions and the database in different regions, repeated session checks and prefetches of lessons and PDFs the teacher had not opened. I moved functions closer to the database, verified session signatures on read screens and removed per-item prefetches. Write actions retained server-side validation. <strong>In measurements taken in October 2026, the first load dropped from around 7 to 1.8 seconds, while the weekly view on a warm instance went from roughly 900 to 300 milliseconds.</strong> These were observed test results and depend on the network and instance state. I also added recovery of drafts on the device and expanded the unit test suite to 56 tests covering dates, calendars, plans, curriculum codes and other product rules.</span>
+  </p>
+</div>
+</div></div>
   </section>
 
   <!-- ============ EXPERIÊNCIA ============ -->
@@ -667,6 +685,13 @@ html,body{margin:0;background:#111319}
     <span class="lang-pt">Investiguei uma cobrança de banda que crescia na DigitalOcean. Medi o tráfego dos servidores e identifiquei que, após a separação entre aplicação e banco, os workers consultavam o MySQL pelo endereço público. Os resultados das consultas passavam pela rede cobrada, mesmo entre servidores que podiam usar a rede privada. Corrigi as conexões para usar a VPC, conferindo a identidade do banco antes de cada troca. <strong>A cobrança extra caiu de US$ 113,43 em agosto para US$ 0 em setembro; outubro também estava zerado no período acompanhado.</strong> Depois criei um monitor em Python que verifica as faturas pela API e procura conexões MySQL pela rede pública, com alertas no Slack para detectar a volta do problema.</span>
     <span class="lang-en" hidden>I investigated a growing DigitalOcean bandwidth charge. By measuring server traffic, I found that after the application and database were separated, workers were querying MySQL through its public address. Query results crossed the billed network even between servers that could use the private network. I moved those connections to the VPC, checking the database identity before each change. <strong>The overage dropped from US$ 113.43 in August to US$ 0 in September; October was also at zero during the observation period.</strong> I then built a Python monitor that checks invoices through the API and looks for MySQL connections over the public network, with Slack alerts to detect a recurrence.</span>
     <a href="https://github.com/rsoldatellirosa/do-bandwidth-overage-fix" target="_blank" rel="noopener"><span class="lang-pt">Ver diagnóstico e código no GitHub ↗</span><span class="lang-en" hidden>See the diagnosis and code on GitHub ↗</span></a>
+  </p>
+</div>
+<div class="prob" id="caso-relatorios-percurso">
+  <b><span class="lang-pt">Relatórios grandes em PDF, sem depender da impressão pelo navegador</span><span class="lang-en" hidden>Large PDF reports without relying on browser printing</span></b>
+  <p>
+    <span class="lang-pt">A impressão de relatórios de percurso pelo navegador travava com grandes volumes de posições. Criei uma ferramenta em Python para consultar os registros com operações de leitura e gerar os PDFs em lote, seguindo a lógica de agrupamento, distâncias e tempos do relatório existente. A consulta de endereços usa cache em SQLite e concorrência limitada para respeitar o serviço que atende a operação. <strong>O lote pode ser retomado sem refazer os PDFs já concluídos.</strong> Os totais de uma amostra são comparados com o relatório do sistema antes do processamento completo. O caso é descrito aqui sem relatórios reais, identificadores de veículos, trajetos, endereços ou dados de clientes.</span>
+    <span class="lang-en" hidden>Browser printing of trip reports would stall on large volumes of position records. I built a Python tool to retrieve records through read-only operations and generate PDFs in batches, following the grouping, distance and time calculations of the existing report. Address lookup uses a SQLite cache and limited concurrency to respect the operational service. <strong>The batch can resume without rebuilding PDFs that are already complete.</strong> Sample totals are compared with the system report before processing the full batch. This case is described without actual reports, vehicle identifiers, routes, addresses or client data.</span>
   </p>
 </div>
 
@@ -740,6 +765,14 @@ html,body{margin:0;background:#111319}
 
       <div class="probs">
         <div class="probs-title"><span class="lang-pt">Problemas que resolvi</span><span class="lang-en" hidden>Problems I solved</span></div>
+<div class="prob" id="caso-estudio-apps-mutirao">
+  <b><span class="lang-pt">Estúdio de Apps: da ideia a um aplicativo que a turma pode testar</span><span class="lang-en" hidden>App Studio: from an idea to an app the class can test</span></b>
+  <p>
+    <span class="lang-pt">Organizei um Estúdio de Apps para as turmas de 8º e 9º ano do Laboratório de Criação e Inovação. Os grupos definem o problema, desenham as telas, organizam os dados em tabelas e avaliam cada versão. Eu opero a IA no projetor e conduzo a construção a partir das decisões dos alunos. Busca, filtros e ordenação viram exemplos para relacionar o aplicativo ao que estudamos sobre dados. <strong>GameData, Perfumaria, Compras para seu mercado e CineMax já têm protótipos publicados.</strong> Cada app é um arquivo HTML com CSS, JavaScript e dados, que também pode ser aberto sem internet. O trabalho continua com testes entre os grupos e pedidos de melhoria. A divulgação reúne os aplicativos, sem nomes ou fotos de alunos.</span>
+    <span class="lang-en" hidden>I organized an App Studio for grades 8 and 9 in the Creation and Innovation Lab. Groups define the problem, sketch screens, organize data in tables and evaluate each version. I operate AI on the classroom projector and guide development around the students' decisions. Search, filters and sorting connect the app to what we study about data. <strong>GameData, Perfumaria, Compras para seu mercado and CineMax already have published prototypes.</strong> Each app is an HTML file containing CSS, JavaScript and data, which can also be opened offline. Work continues through peer testing and improvement requests. The showcase presents the apps without student names or photos.</span>
+  </p>
+  <a href="https://rsoldatellirosa.github.io/projetos-turmas-mutirao/" target="_blank" rel="noopener"><span class="lang-pt">Conhecer os aplicativos das turmas ↗</span><span class="lang-en" hidden>Explore the class apps ↗</span></a>
+</div>
 
         <div class="prob">
           <b><span class="lang-pt">Uma disciplina sem material nenhum</span><span class="lang-en" hidden>A subject with no material at all</span></b>
@@ -891,6 +924,12 @@ html,body{margin:0;background:#111319}
   <span class="lang-pt">Diagnóstico de tráfego MySQL pela rede pública, correção para a VPC e monitor de rede e faturamento. Cobrança extra de banda reduzida de US$ 113,43 em agosto a zero em setembro.</span>
   <span class="lang-en" hidden>Diagnosis of MySQL traffic over the public network, correction to the VPC, and network and billing monitoring. Bandwidth overage reduced from US$ 113.43 in August to zero in September.</span>
   <em>Python · Linux · MySQL · DigitalOcean API · Slack</em>
+</a>
+<a class="repo-card" href="https://rsoldatellirosa.github.io/projetos-turmas-mutirao/" target="_blank" rel="noopener">
+  <b><span class="lang-pt">Estúdio de Apps do Mutirão</span><span class="lang-en" hidden>Mutirão App Studio</span></b>
+  <span class="lang-pt">Protótipos das turmas de 8º e 9º ano, desenvolvidos sob minha orientação. Os grupos definem telas e dados, testam o resultado e propõem melhorias.</span>
+  <span class="lang-en" hidden>Prototypes from grades 8 and 9, developed under my guidance. Groups define screens and data, test the results and propose improvements.</span>
+  <em>HTML · CSS · JavaScript · <span class="lang-pt">Ensino por projetos</span><span class="lang-en" hidden>Project-based learning</span></em>
 </a>
       <a class="repo-card" href="https://github.com/rsoldatellirosa/infra-monitors" target="_blank" rel="noopener">
         <b>infra-monitors</b>

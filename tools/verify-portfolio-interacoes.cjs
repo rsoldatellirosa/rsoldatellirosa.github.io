@@ -8,6 +8,17 @@ const { parse } = require('node-html-parser');
 const script = fs.readFileSync(path.join(__dirname, '../src/portfolio-duas-paginas.js'), 'utf8');
 const previewName = '..';
 
+// Cases must stay with the right experience; school links use the reviewed hub.
+const detailCases = parse(fs.readFileSync(path.join(__dirname, '../portfolio.html'), 'utf8'));
+assert(detailCases.querySelector('#ensino #caso-estudio-apps-mutirao'), 'School case must belong to teaching');
+assert(detailCases.querySelector('[data-portfolio-updates="aulia"] #caso-desempenho-aulia'), 'Performance case must belong to Aulia');
+const hapoloArticle = detailCases.querySelector('#caso-relatorios-percurso').parentNode.parentNode;
+assert(hapoloArticle.querySelector('#caso-banda-digitalocean'), 'Report and bandwidth cases must belong to Hapolo');
+for (const link of detailCases.querySelectorAll('#caso-estudio-apps-mutirao a')) {
+  assert.equal(link.getAttribute('href'), 'https://rsoldatellirosa.github.io/projetos-turmas-mutirao/');
+}
+console.log('PASS: new cases belong to the right experience; school showcase uses only its approved hub.');
+
 function load(file, storage = new Map(), state, options = {}) {
   const tree = parse(options.html || fs.readFileSync(file, 'utf8'));
   const root = tree.querySelector('#portfolio-duas-paginas');

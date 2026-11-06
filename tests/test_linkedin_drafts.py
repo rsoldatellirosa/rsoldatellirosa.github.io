@@ -12,7 +12,7 @@ from urllib.error import HTTPError
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
 import generate_linkedin_drafts as drafts
-from portfolio_cases import load_cases, case_text
+from portfolio_cases import load_cases, case_text, project_url
 
 
 class DraftTests(unittest.TestCase):
@@ -22,9 +22,44 @@ class DraftTests(unittest.TestCase):
     def test_catalog_points_to_the_published_case_and_repository(self):
         for case in load_cases(ROOT):
             markup = (ROOT / case['case_source']).read_text(encoding='utf-8')
-            project = (ROOT / case['project_source']).read_text(encoding='utf-8')
             self.assertIn('id="' + case['id'] + '"', markup)
-            self.assertIn('https://github.com/' + case['repository'], project)
+            if case.get('project_source'):
+                project = (ROOT / case['project_source']).read_text(encoding='utf-8')
+                self.assertIn(project_url(case), project)
+
+    def test_reviewed_cases_do_not_call_ai_or_fetch_external_context(self):
+        cases = [case for case in load_cases(ROOT) if not case.get('ai_rewrite', True)]
+        self.assertEqual(len(cases), 3)
+        for case in cases:
+            with patch.object(drafts, 'rewrite_with_ai', side_effect=AssertionError('No AI')):
+                post, info = drafts.draft_case(ROOT, case, 'chave-ficticia',
+                    fetch=lambda *a, **kw: self.fail('No external context'))
+            self.assertIn(case_text(ROOT, case).split('. ')[0], post)
+            self.assertIn('sem IA', info['mode'])
+            self.assertNotIn('documentado no GitHub', post)
+            self.assertNotIn('https://github.com/rsoldatellirosa/aulia', post)
+
+    def test_school_draft_links_only_the_public_showcase(self):
+        case = next(case for case in load_cases(ROOT) if case.get('section') == 'ensino')
+        post, _ = drafts.draft_case(ROOT, case)
+        self.assertIn('https://rsoldatellirosa.github.io/projetos-turmas-mutirao/', post)
+        self.assertNotIn('https://github.com/', post)
+
+    def test_case_without_public_code_has_no_invented_project_link(self):
+        case = next(case for case in load_cases(ROOT) if case['id'] == 'caso-relatorios-percurso')
+        post, _ = drafts.draft_case(ROOT, case)
+        self.assertIn('portfolio.html#caso-relatorios-percurso', post)
+        self.assertNotIn('Projeto:', post)
+
+    def test_arbitrary_destinations_and_unknown_sections_are_rejected(self):
+        for changes in [{'project_url': 'https://example.invalid/private'},
+                        {'section': 'unknown'}, {'ai_rewrite': 'false'}]:
+            with tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                (root / 'src').mkdir()
+                (root / 'src/portfolio-cases.json').write_text(json.dumps([dict(self.case, **changes)]))
+                with self.assertRaises(ValueError):
+                    load_cases(root)
 
     def test_extracts_portuguese_only_and_keeps_the_result(self):
         text = case_text(ROOT, self.case)

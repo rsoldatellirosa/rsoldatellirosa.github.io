@@ -24,19 +24,28 @@ nesse fluxo. Não registre dados de clientes nem credenciais.
 
 ## Adicionar o próximo caso
 
-1. Crie dois arquivos HTML em `src/`: o relato do caso (PT/EN, classe `prob`) e o
-   cartão do projeto (PT/EN, classe `repo-card`). Use os arquivos
+1. Crie o relato HTML em `src/` (PT/EN, classe `prob`). O cartão do projeto
+   (PT/EN, classe `repo-card`) é opcional. Use os arquivos
    `portfolio-bandwidth-case.html` e `portfolio-bandwidth-project.html` como modelo.
 2. Adicione uma entrada em `src/portfolio-cases.json`, com ID permanente, título,
-   os dois caminhos e o repositório público de `rsoldatellirosa`.
+   `case_source` e `section`: `hapolo` (padrão), `ensino` ou `aulia`.
+   `project_source` só é necessário quando houver cartão. Use `repository` para
+   código público revisado, ou `project_url` para o site público aprovado. Casos
+   sem código público podem omitir ambos; nenhum link de repositório é inventado.
 3. O `id` do bloco do relato precisa corresponder ao ID do catálogo.
 4. Rode `npm run build`, `npm test` e `npm run test:linkedin`.
-5. Publique em `main`. O gerador inclui os casos na experiência da Hapolo e na
-   lista de projetos. A automação aguarda o Pages publicar para preparar o post.
+5. Publique em `main`. O gerador inclui cada caso na experiência correspondente
+   e os cartões opcionais na lista de projetos. A automação aguarda o Pages.
 
-O catálogo atual se destina aos casos da Hapolo. Para casos de outras experiências,
-ajuste a localização no gerador conscientemente antes de cadastrar. Não reescreva
-os arquivos em `src/original/` para adicionar conteúdo.
+Não reescreva os arquivos em `src/original/` para adicionar conteúdo. Destinos
+externos em `project_url` precisam estar na lista revisada em `portfolio_cases.py`.
+Para projetos escolares, use somente o hub público aprovado, sem nomes ou fotos
+de alunos, contatos, dados sensíveis ou links para trabalhos fora da listagem.
+Não copie relatórios reais, identificadores de veículos ou arquivos operacionais.
+
+`ai_rewrite: false` obriga o uso do texto aprovado, mesmo quando há chave de IA.
+Os três casos adicionados em novembro usam essa opção: nenhum contexto externo
+é consultado e nenhuma chamada de IA é feita para preparar seus rascunhos.
 
 Edições de layout, favicon ou texto de um caso já registrado não geram outro
 rascunho. O ID é a identidade do caso; não troque o ID para corrigir sua redação.
@@ -52,7 +61,8 @@ ser desligada em uma execução manual para usar somente o texto aprovado, sem c
 ## Modo sem chave de IA (já funciona)
 
 Sem `OPENAI_API_KEY`, o programa usa o texto aprovado em português do caso,
-organiza as frases em parágrafos e acrescenta links fixos para o caso e o GitHub.
+organiza as frases em parágrafos e acrescenta o link do caso e o destino público,
+quando houver um.
 Esse modo não faz chamadas à OpenAI e não precisa de conta de API.
 
 ## Ativar reescrita com IA (opcional)

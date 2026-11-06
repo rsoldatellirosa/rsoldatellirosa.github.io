@@ -6,7 +6,7 @@ import json
 import re
 import shutil
 import sys
-from portfolio_cases import load_cases
+from portfolio_cases import load_cases, project_url
 
 folder = Path(__file__).resolve().parents[1]/'src'
 original_folder = folder/'original'
@@ -105,24 +105,41 @@ def add_return_navigation(name, markup):
 
 # New cases are additive; the original detail text is still verified below.
 cases = load_cases(folder.parent)
-case_parts, project_parts = [], []
+case_parts = {section: [] for section in ('hapolo', 'ensino', 'aulia')}
+project_parts = []
 for case in cases:
     case_part = (folder.parent/case['case_source']).read_text(encoding='utf-8').strip()
-    project_part = (folder.parent/case['project_source']).read_text(encoding='utf-8').strip()
     assert 'id="'+case['id']+'"' in case_part, 'Case ID must match its source'
-    assert 'https://github.com/'+case['repository'] in project_part, 'Project repository mismatch'
-    case_parts.append(case_part)
-    project_parts.append(project_part)
-case_markup = '\n'.join(case_parts)
+    case_parts[case.get('section', 'hapolo')].append(case_part)
+    if case.get('project_source'):
+        project_part = (folder.parent/case['project_source']).read_text(encoding='utf-8').strip()
+        assert project_url(case) and project_url(case) in project_part, 'Project destination mismatch'
+        project_parts.append(project_part)
 project_markup = '\n'.join(project_parts)
 case_anchor = '<div class="probs-title"><span class="lang-pt">Problemas que resolvi</span><span class="lang-en" hidden>Problems I solved</span></div>'
 assert detail.count(case_anchor) == 2
 assert detail.count('<div class="repos">') == 1
 detail_with_cases = detail
-if cases:
-    detail_with_cases = detail.replace(case_anchor, case_anchor+'\n'+case_markup, 1)
+additions = []
+for section, article in (('hapolo', '<article class="job">'), ('ensino', '<article id="ensino" class="job">')):
+    case_markup = '\n'.join(case_parts[section])
+    if case_markup:
+        start = detail_with_cases.index(article)
+        anchor_at = detail_with_cases.index(case_anchor, start) + len(case_anchor)
+        addition = '\n'+case_markup
+        detail_with_cases = detail_with_cases[:anchor_at]+addition+detail_with_cases[anchor_at:]
+        additions.append(addition)
+if case_parts['aulia']:
+    addition = '\n<div class="probs" data-portfolio-updates="aulia"><h3 class="probs-title"><span class="lang-pt">Aulia na prática</span><span class="lang-en" hidden>Aulia in practice</span></h3>\n'+'\n'.join(case_parts['aulia'])+'\n</div>'
+    detail_with_cases = detail_with_cases.replace(feature, feature+addition, 1)
+    additions.append(addition)
+if project_markup:
     detail_with_cases = detail_with_cases.replace('<div class="repos">', '<div class="repos">\n'+project_markup, 1)
-    assert detail_with_cases.replace('\n'+case_markup, '', 1).replace('\n'+project_markup, '', 1) == detail
+    additions.append('\n'+project_markup)
+without_additions = detail_with_cases
+for addition in additions:
+    without_additions = without_additions.replace(addition, '', 1)
+assert without_additions == detail, 'New cases must preserve all original content'
 views = {name:add_return_navigation(name,markup) for name,markup in {'index':landing,'portfolio':detail_with_cases,'stack':stack}.items()}
 sharing_heads = json.loads((folder/'page-sharing-heads.json').read_text(encoding='utf-8'))
 styles = {'index':landing_css,'portfolio':detail_css,'stack':stack_css}

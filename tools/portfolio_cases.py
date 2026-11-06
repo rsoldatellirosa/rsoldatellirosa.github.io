@@ -14,15 +14,33 @@ def load_cases(root):
         if not re.fullmatch(r'[a-z][a-z0-9-]{2,79}', ident) or ident in seen:
             raise ValueError('Invalid or duplicate case ID')
         seen.add(ident)
-        if not re.fullmatch(r'rsoldatellirosa/[A-Za-z0-9_.-]+', case['repository']):
+        if case.get('section', 'hapolo') not in ('hapolo', 'ensino', 'aulia'):
+            raise ValueError('Unknown case section')
+        if not isinstance(case.get('ai_rewrite', True), bool):
+            raise ValueError('AI rewrite must be a boolean')
+        if case.get('repository') and not re.fullmatch(r'rsoldatellirosa/[A-Za-z0-9_.-]+', case['repository']):
             raise ValueError('Repository must belong to rsoldatellirosa')
+        project_url(case)
         for key in ('case_source', 'project_source'):
+            if key == 'project_source' and not case.get(key):
+                continue
             path = (root / case[key]).resolve()
             if not path.is_relative_to(root / 'src') or path.suffix != '.html' or not path.is_file():
                 raise ValueError('Case sources must be HTML files inside src/')
         if not case['title'].strip():
             raise ValueError('Case title is required')
     return cases
+
+
+def project_url(case):
+    """Only reviewed public destinations; private code need not have a project link."""
+    url = case.get('project_url', '')
+    if url:
+        if url not in ('https://aulia.app.br/',
+                       'https://rsoldatellirosa.github.io/projetos-turmas-mutirao/'):
+            raise ValueError('Project URL must be an approved public destination')
+        return url
+    return 'https://github.com/' + case['repository'] if case.get('repository') else ''
 
 
 class PortugueseText(HTMLParser):

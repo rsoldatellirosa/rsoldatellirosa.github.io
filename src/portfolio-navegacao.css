@@ -68,3 +68,12 @@ html { scroll-behavior:smooth; }
 
 /* Case-study source links follow the portfolio accent in both themes. */
 #portfolio-fiel .prob a { color:var(--accent); font-weight:600; text-underline-offset:3px; }
+#portfolio-fiel .prob > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  text-underline-offset: .2em;
+}

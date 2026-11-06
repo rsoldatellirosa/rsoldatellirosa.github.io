@@ -5,5 +5,29 @@
     "case_source": "src/portfolio-bandwidth-case.html",
     "project_source": "src/portfolio-bandwidth-project.html",
     "repository": "rsoldatellirosa/do-bandwidth-overage-fix"
+  },
+  {
+    "id": "caso-estudio-apps-mutirao",
+    "title": "Estúdio de Apps do Mutirão",
+    "section": "ensino",
+    "case_source": "src/portfolio-mutirao-apps-case.html",
+    "project_source": "src/portfolio-mutirao-apps-project.html",
+    "project_url": "https://rsoldatellirosa.github.io/projetos-turmas-mutirao/",
+    "ai_rewrite": false
+  },
+  {
+    "id": "caso-desempenho-aulia",
+    "title": "Diagnóstico e melhoria de desempenho do Aulia",
+    "section": "aulia",
+    "case_source": "src/portfolio-aulia-performance-case.html",
+    "project_url": "https://aulia.app.br/",
+    "ai_rewrite": false
+  },
+  {
+    "id": "caso-relatorios-percurso",
+    "title": "Geração de relatórios de percurso em PDF",
+    "section": "hapolo",
+    "case_source": "src/portfolio-reports-case.html",
+    "ai_rewrite": false
   }
 ]

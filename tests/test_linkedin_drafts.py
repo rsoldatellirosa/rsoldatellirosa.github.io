@@ -29,7 +29,7 @@ class DraftTests(unittest.TestCase):
 
     def test_reviewed_cases_do_not_call_ai_or_fetch_external_context(self):
         cases = [case for case in load_cases(ROOT) if not case.get('ai_rewrite', True)]
-        self.assertEqual(len(cases), 3)
+        self.assertEqual(len(cases), 4)
         for case in cases:
             with patch.object(drafts, 'rewrite_with_ai', side_effect=AssertionError('No AI')):
                 post, info = drafts.draft_case(ROOT, case, 'chave-ficticia',

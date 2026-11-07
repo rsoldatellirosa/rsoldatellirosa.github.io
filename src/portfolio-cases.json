@@ -24,6 +24,14 @@
     "ai_rewrite": false
   },
   {
+    "id": "caso-agente-aulia",
+    "title": "Assistente que monta a próxima aula no Aulia",
+    "section": "aulia",
+    "case_source": "src/portfolio-aulia-agente-case.html",
+    "project_url": "https://aulia.app.br/",
+    "ai_rewrite": false
+  },
+  {
     "id": "caso-relatorios-percurso",
     "title": "Geração de relatórios de percurso em PDF",
     "section": "hapolo",

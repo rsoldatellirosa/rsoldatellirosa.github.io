@@ -30,5 +30,13 @@
     "source_sha256": "cecac32817e743a1505bcf324aa6afb4a3f3e49ea408df08b17338f260ac4e57",
     "run_url": "https://github.com/rsoldatellirosa/rsoldatellirosa.github.io/actions/runs/42266662992",
     "generated_at": "2026-11-06T17:59:55.603042+00:00"
+  },
+  "caso-agente-aulia": {
+    "mode": "texto aprovado, sem IA",
+    "warning": "",
+    "source": "https://rsoldatellirosa.github.io/portfolio.html#caso-agente-aulia",
+    "source_sha256": "a342c5fc08476d0766e7bbbe81ef7f8de895bf066e0294e03dc031fff3c390aa",
+    "run_url": "https://github.com/rsoldatellirosa/rsoldatellirosa.github.io/actions/runs/42428622839",
+    "generated_at": "2026-11-08T00:11:39.986606+00:00"
   }
 }

@@ -7,6 +7,14 @@
     "repository": "rsoldatellirosa/do-bandwidth-overage-fix"
   },
   {
+    "id": "caso-memoria-ia-vps",
+    "title": "Memória de IA auto-hospedada numa VPS",
+    "case_source": "src/portfolio-memoria-ia-case.html",
+    "project_source": "src/portfolio-memoria-ia-project.html",
+    "repository": "rsoldatellirosa/ai-memory-selfhosted",
+    "ai_rewrite": false
+  },
+  {
     "id": "caso-estudio-apps-mutirao",
     "title": "Estúdio de Apps do Mutirão",
     "section": "ensino",

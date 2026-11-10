@@ -76,7 +76,9 @@ class GitHubState:
 def pending_cases(cases, state, selected='', force=False):
     if selected and not any(case['id'] == selected for case in cases):
         raise ValueError('Unknown case ID')
+    # Project-only catalog entries (a repo card without a case paragraph) are not drafted.
     return [case for case in cases if (not selected or case['id'] == selected)
+            and case.get('case_source')
             and (force or case['id'] not in state)]
 
 

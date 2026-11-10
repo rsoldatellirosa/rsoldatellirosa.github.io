@@ -21,8 +21,10 @@ def load_cases(root):
         if case.get('repository') and not re.fullmatch(r'rsoldatellirosa/[A-Za-z0-9_.-]+', case['repository']):
             raise ValueError('Repository must belong to rsoldatellirosa')
         project_url(case)
+        if not case.get('case_source') and not case.get('project_source'):
+            raise ValueError('Case needs a case source or a project source')
         for key in ('case_source', 'project_source'):
-            if key == 'project_source' and not case.get(key):
+            if not case.get(key):
                 continue
             path = (root / case[key]).resolve()
             if not path.is_relative_to(root / 'src') or path.suffix != '.html' or not path.is_file():

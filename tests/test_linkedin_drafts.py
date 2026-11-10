@@ -21,8 +21,9 @@ class DraftTests(unittest.TestCase):
 
     def test_catalog_points_to_the_published_case_and_repository(self):
         for case in load_cases(ROOT):
-            markup = (ROOT / case['case_source']).read_text(encoding='utf-8')
-            self.assertIn('id="' + case['id'] + '"', markup)
+            if case.get('case_source'):
+                markup = (ROOT / case['case_source']).read_text(encoding='utf-8')
+                self.assertIn('id="' + case['id'] + '"', markup)
             if case.get('project_source'):
                 project = (ROOT / case['project_source']).read_text(encoding='utf-8')
                 self.assertIn(project_url(case), project)

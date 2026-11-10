@@ -121,9 +121,10 @@ cases = load_cases(folder.parent)
 case_parts = {section: [] for section in ('hapolo', 'ensino', 'aulia')}
 project_parts = []
 for case in cases:
-    case_part = (folder.parent/case['case_source']).read_text(encoding='utf-8').strip()
-    assert 'id="'+case['id']+'"' in case_part, 'Case ID must match its source'
-    case_parts[case.get('section', 'hapolo')].append(case_part)
+    if case.get('case_source'):
+        case_part = (folder.parent/case['case_source']).read_text(encoding='utf-8').strip()
+        assert 'id="'+case['id']+'"' in case_part, 'Case ID must match its source'
+        case_parts[case.get('section', 'hapolo')].append(case_part)
     if case.get('project_source'):
         project_part = (folder.parent/case['project_source']).read_text(encoding='utf-8').strip()
         assert project_url(case) and project_url(case) in project_part, 'Project destination mismatch'

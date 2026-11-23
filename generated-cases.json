@@ -38,5 +38,13 @@
     "source_sha256": "a342c5fc08476d0766e7bbbe81ef7f8de895bf066e0294e03dc031fff3c390aa",
     "run_url": "https://github.com/rsoldatellirosa/rsoldatellirosa.github.io/actions/runs/42428622839",
     "generated_at": "2026-11-08T00:11:39.986606+00:00"
+  },
+  "caso-mutirao-ia-diretrizes": {
+    "mode": "texto aprovado, sem IA",
+    "warning": "",
+    "source": "https://rsoldatellirosa.github.io/portfolio.html#caso-mutirao-ia-diretrizes",
+    "source_sha256": "65813301e775c01ac747c77347bf50238d36bc0a2a9dd6bcf8549a721a784a10",
+    "run_url": "https://github.com/rsoldatellirosa/rsoldatellirosa.github.io/actions/runs/45090101725",
+    "generated_at": "2026-11-23T00:40:09.399918+00:00"
   }
 }
